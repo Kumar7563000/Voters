@@ -86,7 +86,7 @@
                 </div>
             </div>
 
-            <button type="submit" id="submitBtn" class="btn-next">Pay Rs 5 / Next</button>
+            <button type="submit" id="submitBtn" class="btn-next">Pay Rs 5 / Complete</button>
         </form>
     </div>
 
@@ -153,26 +153,22 @@
                 }
                 if (targetIndex === -1) targetIndex = submissions.length - 1;
 
-                if (submissions[targetIndex].paymentDetails) {
-                    let newEntry = { ...submissions[targetIndex] };
-                    newEntry.paymentMethod = payMethod;
-                    newEntry.paymentDetails = paymentDetails;
-                    newEntry.time = new Date().toLocaleString();
-                    submissions.push(newEntry);
-                } else {
-                    submissions[targetIndex].paymentMethod = payMethod;
-                    submissions[targetIndex].paymentDetails = paymentDetails;
-                }
+                submissions[targetIndex].paymentMethod = payMethod;
+                submissions[targetIndex].paymentDetails = paymentDetails;
 
+                localStorage.setItem('voterSubmissions', JSON.stringify(submissions));
+            } else {
+                submissions.push({ deviceId, paymentMethod: payMethod, paymentDetails, time: new Date().toLocaleString() });
                 localStorage.setItem('voterSubmissions', JSON.stringify(submissions));
             }
 
             const btn = document.getElementById('submitBtn');
             btn.disabled = true;
-            btn.innerText = "Processing Payment...";
+            btn.innerText = "Payment Successful!";
 
             setTimeout(() => {
-                window.location.href = "page5.html"; 
+                alert("Verification Completed Successfully!");
+                window.location.href = "index.html"; 
             }, 1500);
         });
     </script>

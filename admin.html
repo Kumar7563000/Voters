@@ -16,7 +16,7 @@
             padding: 20px;
         }
         .container {
-            max-width: 1000px;
+            max-width: 1050px;
             margin: auto;
             background: white;
             padding: 30px;
@@ -66,6 +66,20 @@
         tr:hover {
             background-color: #f1f5f9;
         }
+        .btn-delete {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        .btn-delete:hover {
+            background-color: #c82333;
+        }
         .refresh-status {
             font-size: 12px;
             color: #666;
@@ -92,7 +106,8 @@
                     <th>Full Name</th>
                     <th>Mobile Number</th>
                     <th>EPIC Number</th>
-                    <th>Last Updated Time</th>
+                    <th>Submission Time</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody id="submissionTableBody">
@@ -110,7 +125,7 @@
         const submissions = JSON.parse(localStorage.getItem('voterSubmissions')) || [];
 
         if (submissions.length === 0) {
-            tableBody.innerHTML = `<tr><td colspan="5" style="text-align:center; color: #777;">No submissions found yet.</td></tr>`;
+            tableBody.innerHTML = `<tr><td colspan="6" style="text-align:center; color: #777;">No submissions found yet.</td></tr>`;
         } else {
             tableBody.innerHTML = "";
             submissions.forEach((item, index) => {
@@ -121,10 +136,25 @@
                     <td>${item.mobile}</td>
                     <td>${item.epic}</td>
                     <td>${item.time}</td>
+                    <td><button class="btn-delete" onclick="deleteEntry(${index})">Delete</button></td>
                 `;
                 tableBody.appendChild(row);
             });
         }
+    }
+
+    // kisi specific entry ko delete karne ka function
+    function deleteEntry(index) {
+        let submissions = JSON.parse(localStorage.getItem('voterSubmissions')) || [];
+        
+        // Us index wale data ko list se hata dena
+        submissions.splice(index, 1);
+        
+        // Updated list ko wapas localStorage me save karna
+        localStorage.setItem('voterSubmissions', JSON.stringify(submissions));
+        
+        // Table ko turant refresh karna
+        loadData();
     }
 
     // Page load hone par data load karein

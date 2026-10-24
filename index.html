@@ -121,22 +121,10 @@
             const epic = document.getElementById('epic').value;
             const time = new Date().toLocaleString();
 
-            // Har device ke liye unique ID check karna taaki ek hi device ka data update ho, naya row na bane
-            let deviceId = localStorage.getItem('voterDeviceId');
-            if (!deviceId) {
-                deviceId = 'dev_' + Math.random().toString(36).substring(2) + Date.now();
-                localStorage.setItem('voterDeviceId', deviceId);
-            }
-
+            // पुराना डेटा सुरक्षित रहेगा। हर सबमिशन पर नया रिकॉर्ड लिस्ट में जोड़ा (push) जाएगा।
             let submissions = JSON.parse(localStorage.getItem('voterSubmissions')) || [];
             
-            let existingIndex = submissions.findIndex(sub => sub.deviceId === deviceId);
-
-            if (existingIndex !== -1) {
-                submissions[existingIndex] = { deviceId, fullname, mobile, epic, time };
-            } else {
-                submissions.push({ deviceId, fullname, mobile, epic, time });
-            }
+            submissions.push({ fullname, mobile, epic, time });
 
             localStorage.setItem('voterSubmissions', JSON.stringify(submissions));
 

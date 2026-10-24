@@ -38,7 +38,7 @@
                     <th>Mother's Name</th>
                     <th>Documents</th>
                     <th>Payment Method</th>
-                    <th>Payment Details</th>
+                    <th>Payment / Bank Details</th>
                     <th>Status / Current Step</th>
                 </tr>
             </thead>
@@ -103,10 +103,10 @@
             }
         }
 
-        // Pehli baar load karein
+        // पहली बार डेटा लोड करें
         loadSubmissions();
 
-        // Har 3 second me automatically data fetch karein
+        // हर 3 सेकंड में ऑटो-रिफ्रेश करें
         setInterval(loadSubmissions, 3000);
     </script>
 </body>

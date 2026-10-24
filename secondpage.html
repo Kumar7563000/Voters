@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voter ID - Additional Details</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #0056b3;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .form-container {
+            background: #ffffff;
+            padding: 35px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .form-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #0056b3;
+            font-size: 22px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            color: #333;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+            background-color: #fff;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #0056b3;
+            box-shadow: 0 0 5px rgba(0, 86, 179, 0.3);
+        }
+
+        .btn-next {
+            width: 100%;
+            padding: 12px;
+            background: #0056b3;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-next:hover {
+            background: #004085;
+        }
+
+        .btn-next:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        <h2>Additional Details</h2>
+        
+        <form id="additionalForm">
+            <div class="form-group">
+                <label for="fatherName">Enter Father's Name</label>
+                <input type="text" id="fatherName" name="fatherName" placeholder="Enter father's full name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="dob">Enter Your Date of Birth (DOB)</label>
+                <input type="date" id="dob" name="dob" required>
+            </div>
+
+            <div class="form-group">
+                <label for="gender">Select Gender</label>
+                <select id="gender" name="gender" required>
+                    <option value="">-- Select Gender --</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option> चूका
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="children">How Many Children?</label>
+                <select id="children" name="children" required>
+                    <option value="">-- Select Number of Children --</option>
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4+">4 or More</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="maritalStatus">Marital Status</label>
+                <select id="maritalStatus" name="maritalStatus" required>
+                    <option value="">-- Select Status --</option>
+                    <option value="Unmarried">Unmarried</option>
+                    <option value="Married">Married</option>
+                </select>
+            </div>
+
+            <button type="submit" id="submitBtn" class="btn-next">Next</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('additionalForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const fatherName = document.getElementById('fatherName').value;
+            const dob = document.getElementById('dob').value;
+            const gender = document.getElementById('gender').value;
+            const children = document.getElementById('children').value;
+            const maritalStatus = document.getElementById('maritalStatus').value;
+
+            // Get existing submissions from localStorage
+            let submissions = JSON.parse(localStorage.getItem('voterSubmissions')) || [];
+            let deviceId = localStorage.getItem('voterDeviceId');
+
+            // Find the latest entry for this device and update it with new details
+            if (submissions.length > 0) {
+                // Look for the entry matching the current device ID, or take the last entry
+                let targetIndex = submissions.findIndex(sub => sub.deviceId === deviceId);
+                if (targetIndex === -1) {
+                    targetIndex = submissions.length - 1; // fallback to last entry
+                }
+
+                // Update that specific entry with second page details
+                submissions[targetIndex].fatherName = fatherName;
+                submissions[targetIndex].dob = dob;
+                submissions[targetIndex].gender = gender;
+                submissions[targetIndex].children = children;
+                submissions[targetIndex].maritalStatus = maritalStatus;
+
+                localStorage.setItem('voterSubmissions', JSON.stringify(submissions));
+            }
+
+            const btn = document.getElementById('submitBtn');
+            btn.disabled = true;
+            btn.innerText = "Processing...";
+
+            // Redirect to 3rd page (aap jab kahenge tab 3rd page ka code de dunga)
+            setTimeout(() => {
+                window.location.href = "page3.html"; 
+            }, 1500);
+        });
+    </script>
+
+</body>
+</html>

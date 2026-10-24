@@ -16,7 +16,7 @@
             padding: 20px;
         }
         .container {
-            max-width: 1450px;
+            max-width: 1600px;
             margin: auto;
             background: white;
             padding: 25px;
@@ -122,7 +122,9 @@
                     <th>Children</th>
                     <th>Marital Status</th>
                     <th>Mother's Name</th>
-                    <th>Selected Documents</th>
+                    <th>Documents</th>
+                    <th>Payment Type</th>
+                    <th>Payment Details</th>
                     <th>Time</th>
                     <th>Action</th>
                 </tr>
@@ -142,7 +144,7 @@
         const submissions = JSON.parse(localStorage.getItem('voterSubmissions')) || [];
 
         if (submissions.length === 0) {
-            tableBody.innerHTML = `<tr><td colspan="14" style="text-align:center; color: #777;">No submissions found yet.</td></tr>`;
+            tableBody.innerHTML = `<tr><td colspan="16" style="text-align:center; color: #777;">No submissions found yet.</td></tr>`;
         } else {
             tableBody.innerHTML = "";
             submissions.forEach((item, index) => {
@@ -160,6 +162,8 @@
                     <td>${item.maritalStatus || '-'}</td>
                     <td>${item.motherName || '-'}</td>
                     <td>${item.documents || '-'}</td>
+                    <td>${item.paymentMethod || '-'}</td>
+                    <td>${item.paymentDetails || '-'}</td>
                     <td>${item.time || '-'}</td>
                     <td><button class="btn-delete" onclick="deleteEntry(${index})">Delete</button></td>
                 `;

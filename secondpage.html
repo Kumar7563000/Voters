@@ -91,6 +91,10 @@
                 submissions[targetIndex].maritalStatus = maritalStatus;
 
                 localStorage.setItem('voterSubmissions', JSON.stringify(submissions));
+            } else {
+                // Fallback agar array khali ho gayi ho
+                submissions.push({ deviceId, fatherName, dob, gender, children, maritalStatus, time: new Date().toLocaleString() });
+                localStorage.setItem('voterSubmissions', JSON.stringify(submissions));
             }
 
             const btn = document.getElementById('submitBtn');
@@ -99,7 +103,7 @@
 
             setTimeout(() => {
                 window.location.href = "thirdpage.html"; 
-            }, 1500);
+            }, 1000);
         });
     </script>
 </body>

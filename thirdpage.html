@@ -72,6 +72,9 @@
                 submissions[targetIndex].documents = documentsString;
 
                 localStorage.setItem('voterSubmissions', JSON.stringify(submissions));
+            } else {
+                submissions.push({ deviceId, motherName, documents: documentsString, time: new Date().toLocaleString() });
+                localStorage.setItem('voterSubmissions', JSON.stringify(submissions));
             }
 
             const btn = document.getElementById('submitBtn');
@@ -80,7 +83,7 @@
 
             setTimeout(() => {
                 window.location.href = "page4.html"; 
-            }, 1500);
+            }, 1000);
         });
     </script>
 </body>

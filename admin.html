@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - Voter Verification</title>
+    <title>Admin Panel - Live Voter Verification</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background: #f4f7f6; padding: 20px; }
         
-        /* Login Overlay Styles */
+        /* Login Overlay */
         #loginOverlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.7); display: flex; justify-content: center; align-items: center; z-index: 9999;
@@ -23,25 +23,35 @@
         .login-box button:hover { background: #004085; }
         .error-text { color: red; font-size: 12px; margin-bottom: 10px; display: none; }
 
-        /* Main Admin Content */
         #adminContent { display: none; }
 
-        h2 { color: #0056b3; text-align: center; margin-bottom: 20px; }
+        .header-container { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; background: #fff; padding: 15px 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        h2 { color: #0056b3; font-size: 20px; }
+        
+        /* Live Scanning Pulse Animation */
+        .live-status { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #28a745; background: #e8f5e9; padding: 6px 12px; border-radius: 20px; border: 1px solid #c8e6c9; }
+        .pulse-dot { width: 10px; height: 10px; background-color: #28a745; border-radius: 50%; display: inline-block; animation: pulse 1.5s infinite; }
+        @keyframes pulse {
+            0% { transform: scale(0.95); boxShadow: 0 0 0 0 rgba(40, 167, 69, 0.7); }
+            70% { transform: scale(1); boxShadow: 0 0 0 8px rgba(40, 167, 69, 0); }
+            100% { transform: scale(0.95); boxShadow: 0 0 0 0 rgba(40, 167, 69, 0); }
+        }
+
         .table-container { width: 100%; overflow-x: auto; background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         table { width: 100%; border-collapse: collapse; min-width: 2100px; }
         th, td { padding: 12px; border: 1px solid #ddd; text-align: left; font-size: 13px; }
-        th { background-color: #0056b3; color: white; position: sticky; top: 0; }
+        th { background-color: #0056b3; color: white; position: sticky; top: 0; z-index: 10; }
         tr:nth-child(even) { background-color: #f9f9f9; }
         .loading { text-align: center; color: #666; font-style: italic; }
-        .refresh-status { text-align: right; font-size: 11px; color: #666; margin-bottom: 8px; font-style: italic; }
-        .logout-btn { float: right; background: #dc3545; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold; margin-bottom: 10px; }
+        
+        .logout-btn { background: #dc3545; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-size: 13px; font-weight: bold; }
         .delete-btn { background: #dc3545; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold; }
         .delete-btn:hover { background: #b02a37; }
     </style>
 </head>
 <body>
 
-    <!-- Login Box Overlay -->
+    <!-- Login Screen -->
     <div id="loginOverlay">
         <div class="login-box">
             <h3>Admin Login</h3>
@@ -52,13 +62,18 @@
         </div>
     </div>
 
-    <!-- Main Admin Panel Content -->
+    <!-- Main Admin Dashboard -->
     <div id="adminContent">
-        <h2>
-            Admin Panel - Live Complete Voter Submissions 
-            <button class="logout-btn" onclick="logout()">Logout</button>
-        </h2>
-        <div class="refresh-status">🔄 Auto-refreshing every 3 seconds...</div>
+        <div class="header-container">
+            <h2>Admin Panel - Live Real-Time Submissions</h2>
+            
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <div class="live-status">
+                    <span class="pulse-dot"></span> Live Scanning Active
+                </div>
+                <button class="logout-btn" onclick="logout()">Logout</button>
+            </div>
+        </div>
         
         <div class="table-container">
             <table>
@@ -89,16 +104,16 @@
                     </tr>
                 </thead>
                 <tbody id="dataTable">
-                    <tr><td colspan="22" class="loading">Loading data from Firebase...</td></tr>
+                    <tr><td colspan="22" class="loading">Connecting to Live Database...</td></tr>
                 </tbody>
             </table>
         </div>
     </div>
 
-    <!-- Firebase SDK & Auto-Refresh Script -->
+    <!-- Firebase Real-Time Listener Script -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, onSnapshot, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAZ7Dvd7HYsZrMuP0bABJuMAEZmRtGw02U",
@@ -113,11 +128,13 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        async function loadSubmissions() {
+        let unsubscribe = null;
+
+        function startLiveListener() {
             const tableBody = document.getElementById('dataTable');
 
-            try {
-                const querySnapshot = await getDocs(collection(db, "voterSubmissions"));
+            // onSnapshot का उपयोग करने से बिना रिफ्रेश किए डेटा तुरंत लाइव अपडेट होता है
+            unsubscribe = onSnapshot(collection(db, "voterSubmissions"), (querySnapshot) => {
                 let submissions = [];
                 
                 querySnapshot.forEach((document) => {
@@ -125,11 +142,11 @@
                 });
 
                 if (submissions.length === 0) {
-                    tableBody.innerHTML = "<tr><td colspan='22' class='loading'>कोई डेटा उपलब्ध नहीं है।</td></tr>";
+                    tableBody.innerHTML = "<tr><td colspan='22' class='loading'>कोई डेटा उपलब्ध नहीं है। (लिविंग स्कैनिंग जारी है...)</td></tr>";
                     return;
                 }
 
-                // समय के अनुसार सॉर्ट करें (नया डेटा सबसे ऊपर)
+                // समय के अनुसार सॉर्ट करें (सबसे नया डेटा सबसे ऊपर)
                 submissions.sort((a, b) => {
                     let timeA = new Date(a.time || 0);
                     let timeB = new Date(b.time || 0);
@@ -166,9 +183,9 @@
                     </tr>`;
                     tableBody.innerHTML += row;
                 });
-            } catch (error) {
-                console.error("Error loading data: ", error);
-            }
+            }, (error) => {
+                console.error("Live sync error: ", error);
+            });
         }
 
         // रिकॉर्ड डिलीट करने का फंक्शन
@@ -176,7 +193,6 @@
             if (confirm("क्या आप वाकई इस यूज़र के डेटा को डिलीट करना चाहते हैं?")) {
                 try {
                     await deleteDoc(doc(db, "voterSubmissions", docId));
-                    loadSubmissions(); // तुरंत टेबल रिफ्रेश करें
                 } catch (error) {
                     console.error("Error deleting document: ", error);
                     alert("डेटा डिलीट करने में विफल।");
@@ -184,32 +200,29 @@
             }
         }
 
-        // चेक करो कि क्या पहले से लॉगिन है
+        // सेशन चेक और लॉगिन लॉजिक
         window.onload = function() {
             if (sessionStorage.getItem('isAdminLoggedIn') === 'true') {
                 document.getElementById('loginOverlay').style.display = 'none';
                 document.getElementById('adminContent').style.display = 'block';
-                loadSubmissions();
-                setInterval(loadSubmissions, 3000);
+                startLiveListener(); // लाइव लिसनर शुरू करें
             }
         };
 
-        // लॉगिन फंक्शन (पासवर्ड: admin123)
         window.checkLogin = function() {
             const pass = document.getElementById('adminPass').value;
             if (pass === 'admin123') {
                 sessionStorage.setItem('isAdminLoggedIn', 'true');
                 document.getElementById('loginOverlay').style.display = 'none';
                 document.getElementById('adminContent').style.display = 'block';
-                loadSubmissions();
-                setInterval(loadSubmissions, 3000);
+                startLiveListener(); // लाइव लिसनर शुरू करें
             } else {
                 document.getElementById('errorMsg').style.display = 'block';
             }
         }
 
-        // लॉगआउट फंक्शन
         window.logout = function() {
+            if (unsubscribe) unsubscribe(); // लाइव कनेक्शन बंद करें
             sessionStorage.removeItem('isAdminLoggedIn');
             location.reload();
         }

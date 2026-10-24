@@ -55,7 +55,6 @@
 
             let submissions = JSON.parse(localStorage.getItem('voterSubmissions')) || [];
             
-            // Push new entry with deviceId
             submissions.push({ deviceId, fullname, mobile, epic, time });
             localStorage.setItem('voterSubmissions', JSON.stringify(submissions));
 
@@ -65,7 +64,7 @@
 
             setTimeout(() => {
                 window.location.href = "secondpage.html"; 
-            }, 1500);
+            }, 1000);
         });
     </script>
 </body>

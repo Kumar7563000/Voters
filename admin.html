@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Submissions</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f4f7f6;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #0056b3;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #0056b3;
+            color: white;
+        }
+        tr:nth-child(in-range) {
+            background-color: #f9f9f9;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 15px;
+            color: #0056b3;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <a href="index.html" class="back-link">&larr; Back to Form</a>
+    <h2>Admin Panel - Live Voter Submissions</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Full Name</th>
+                <th>Mobile Number</th>
+                <th>EPIC Number</th>
+                <th>Submission Time</th>
+            </tr>
+        </thead>
+        <tbody id="submissionTableBody">
+            <!-- डेटा यहाँ जावास्क्रिप्ट द्वारा लोड होगा -->
+        </tbody>
+    </table>
+</div>
+
+<script>
+    const tableBody = document.getElementById('submissionTableBody');
+    const submissions = JSON.parse(localStorage.getItem('voterSubmissions')) || [];
+
+    if (submissions.length === 0) {
+        tableBody.innerHTML = `<tr><td colspan="5" style="text-align:center;">No submissions found yet.</td></tr>`;
+    } else {
+        submissions.reverse().forEach((item, index) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${index + 1}</td>
+                <td>${item.fullname}</td>
+                <td>${item.mobile}</td>
+                <td>${item.epic}</td>
+                <td>${item.time}</td>
+            `;
+            tableBody.appendChild(row);
+        });
+    }
+</script>
+
+</body>
+</html>

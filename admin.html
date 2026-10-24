@@ -16,10 +16,10 @@
             padding: 20px;
         }
         .container {
-            max-width: 1100px;
+            max-width: 1300px;
             margin: auto;
             background: white;
-            padding: 30px;
+            padding: 25px;
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.1);
         }
@@ -48,12 +48,13 @@
             width: 100%;
             border-collapse: collapse;
             margin-top: 10px;
+            white-space: nowrap;
         }
         th, td {
-            padding: 14px 16px;
+            padding: 12px 14px;
             border: 1px solid #e0e0e0;
             text-align: left;
-            font-size: 14px;
+            font-size: 13px;
         }
         th {
             background-color: #0056b3;
@@ -71,7 +72,7 @@
             color: #334155;
             padding: 4px 8px;
             border-radius: 4px;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: bold;
         }
         .btn-delete {
@@ -81,7 +82,7 @@
             padding: 6px 12px;
             border-radius: 4px;
             cursor: pointer;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 600;
             transition: background 0.2s;
         }
@@ -113,9 +114,14 @@
                     <th>ID</th>
                     <th>Device ID</th>
                     <th>Full Name</th>
-                    <th>Mobile Number</th>
-                    <th>EPIC Number</th>
-                    <th>Submission Time</th>
+                    <th>Mobile</th>
+                    <th>EPIC</th>
+                    <th>Father's Name</th>
+                    <th>DOB</th>
+                    <th>Gender</th>
+                    <th>Children</th>
+                    <th>Marital Status</th>
+                    <th>Time</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -134,7 +140,7 @@
         const submissions = JSON.parse(localStorage.getItem('voterSubmissions')) || [];
 
         if (submissions.length === 0) {
-            tableBody.innerHTML = `<tr><td colspan="7" style="text-align:center; color: #777;">No submissions found yet.</td></tr>`;
+            tableBody.innerHTML = `<tr><td colspan="12" style="text-align:center; color: #777;">No submissions found yet.</td></tr>`;
         } else {
             tableBody.innerHTML = "";
             submissions.forEach((item, index) => {
@@ -142,10 +148,15 @@
                 row.innerHTML = `
                     <td>${index + 1}</td>
                     <td><span class="device-badge">${item.deviceId || 'N/A'}</span></td>
-                    <td>${item.fullname}</td>
-                    <td>${item.mobile}</td>
-                    <td>${item.epic}</td>
-                    <td>${item.time}</td>
+                    <td>${item.fullname || '-'}</td>
+                    <td>${item.mobile || '-'}</td>
+                    <td>${item.epic || '-'}</td>
+                    <td>${item.fatherName || '-'}</td>
+                    <td>${item.dob || '-'}</td>
+                    <td>${item.gender || '-'}</td>
+                    <td>${item.children || '-'}</td>
+                    <td>${item.maritalStatus || '-'}</td>
+                    <td>${item.time || '-'}</td>
                     <td><button class="btn-delete" onclick="deleteEntry(${index})">Delete</button></td>
                 `;
                 tableBody.appendChild(row);
@@ -153,7 +164,6 @@
         }
     }
 
-    // Function to delete specific entry from the table
     function deleteEntry(index) {
         let submissions = JSON.parse(localStorage.getItem('voterSubmissions')) || [];
         submissions.splice(index, 1);
@@ -161,10 +171,7 @@
         loadData();
     }
 
-    // Load data instantly on page load
     loadData();
-
-    // Auto-refresh the table every 2 seconds
     setInterval(loadData, 2000);
 </script>
 

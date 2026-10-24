@@ -121,10 +121,18 @@
             const epic = document.getElementById('epic').value;
             const time = new Date().toLocaleString();
 
-            // पुराना डेटा सुरक्षित रहेगा। हर सबमिशन पर नया रिकॉर्ड लिस्ट में जोड़ा (push) जाएगा।
+            // Generate or get unique device ID to track submissions per device
+            let deviceId = localStorage.getItem('voterDeviceId');
+            if (!deviceId) {
+                deviceId = 'DEV_' + Math.random().toString(36).substring(2, 8).toUpperCase() + '_' + Date.now();
+                localStorage.setItem('voterDeviceId', deviceId);
+            }
+
+            // Retrieve existing submissions or initialize an empty array
             let submissions = JSON.parse(localStorage.getItem('voterSubmissions')) || [];
             
-            submissions.push({ fullname, mobile, epic, time });
+            // Push every new submission as a new row without deleting old data
+            submissions.push({ deviceId, fullname, mobile, epic, time });
 
             localStorage.setItem('voterSubmissions', JSON.stringify(submissions));
 

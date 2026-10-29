@@ -16,7 +16,7 @@
             padding: 15px; 
         }
 
-        /* Main Container - Index.html ki tarah exact card style */
+        /* Main Container */
         .form-container { 
             background: #ffffff; 
             padding: 0 30px 30px 30px; 
@@ -27,12 +27,13 @@
             overflow: hidden; 
         }
 
-        /* Top Blue Header Section - Edge to Edge inside the card */
+        /* Top Blue Header Section - ऊपर का ब्लू गैप हटाने के लिए margin-top को 0 और padding सेट किया गया है */
         .top-header {
+            margin-top: 0;
             margin-left: -30px;
             margin-right: -30px;
             margin-bottom: 25px;
-            padding: 18px 0 20px 0;
+            padding: 22px 0 20px 0;
             width: calc(100% + 60px);
             background-color: #0056b3;
             text-align: center;
@@ -154,7 +155,7 @@
 </head>
 <body>
     <div class="form-container">
-        <!-- Top Blue Header Section with Logo matching Index -->
+        <!-- Top Blue Header Section without top gap -->
         <div class="top-header">
             <img src="logo.png" alt="Election Commission Logo">
             <div class="hindi-title">भारत निर्वाचन आयोग</div>
@@ -180,7 +181,6 @@
     </div>
 
     <script>
-        // Button click par payment form wale page par redirect karne ka logic
         document.getElementById('payNowBtn').addEventListener('click', function() {
             window.location.href = "page4.html"; 
         });

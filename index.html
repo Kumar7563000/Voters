@@ -42,12 +42,13 @@
             }
         }
 
-        /* Top Blue Header Section - Edge to Edge */
+        /* Top Blue Header Section - Fully stretched edge-to-edge on top, left and right */
         .top-header {
+            margin-top: 0;
             margin-left: -20px;
             margin-right: -20px;
             margin-bottom: 25px;
-            padding: 15px 0 20px 0;
+            padding: 25px 0 25px 0;
             width: calc(100% + 40px);
             background-color: #0056b3;
             text-align: center;
@@ -59,15 +60,17 @@
                 margin-left: -30px;
                 margin-right: -30px;
                 width: calc(100% + 60px);
+                border-top-left-radius: 16px;
+                border-top-right-radius: 16px;
             }
         }
 
-        /* Logo fix: object-fit contain taaki logo kate nahi aur pura dikhe */
+        /* Logo styling without cutting */
         .top-header img {
             width: 100%;
-            max-height: 120px;
+            max-height: 130px;
             object-fit: contain;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             display: block;
             background: transparent;
             box-shadow: none;
@@ -173,7 +176,7 @@
 <body>
     <div class="form-container">
         
-        <!-- Top Header with Non-cropping Logo & Titles -->
+        <!-- Top Header with Stretched Edge-to-Edge Banner & Titles -->
         <div class="top-header">
             <img src="logo.png" alt="Election Commission Logo">
             <div class="hindi-title">भारत निर्वाचन आयोग</div>

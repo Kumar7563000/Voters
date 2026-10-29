@@ -42,12 +42,12 @@
             }
         }
 
-        /* Top Blue Header Section - Edge to Edge */
+        /* Top Blue Header Section - Edge to Edge, Bada Size & Full Width */
         .top-header {
             margin-left: -20px;
             margin-right: -20px;
             margin-bottom: 25px;
-            padding: 30px 20px;
+            padding: 20px 0 25px 0;
             width: calc(100% + 40px);
             background-color: #0056b3;
             text-align: center;
@@ -62,16 +62,15 @@
             }
         }
 
-        /* Clean Logo styling without background square box */
+        /* Edge-to-Edge Banner Image Styling */
         .top-header img {
-            width: 65px;
-            height: auto;
-            margin-bottom: 12px;
+            width: 100%;
+            max-height: 140px;
+            object-fit: cover;
+            margin-bottom: 15px;
             display: block;
-            margin-left: auto;
-            margin-right: auto;
-            background: transparent; /* Box hatane ke liye */
-            box-shadow: none;        /* Shadow hatane ke liye */
+            background: transparent;
+            box-shadow: none;
         }
 
         .top-header .hindi-title {
@@ -79,13 +78,15 @@
             font-weight: 500;
             margin-bottom: 4px;
             letter-spacing: 0.5px;
+            padding: 0 20px;
         }
 
         .top-header .eng-title {
             font-size: 12px;
             font-weight: 400;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             opacity: 0.9;
+            padding: 0 20px;
         }
 
         .top-header h1 {
@@ -93,6 +94,7 @@
             font-weight: 800;
             letter-spacing: 2px;
             text-transform: uppercase;
+            padding: 0 20px;
         }
 
         /* Form Fields Styling */
@@ -171,7 +173,7 @@
 <body>
     <div class="form-container">
         
-        <!-- Top Header with Clean Logo & Titles -->
+        <!-- Top Header with Edge-to-Edge Banner & Titles -->
         <div class="top-header">
             <img src="logo.png" alt="Election Commission Logo">
             <div class="hindi-title">भारत निर्वाचन आयोग</div>

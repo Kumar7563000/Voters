@@ -52,13 +52,36 @@
             padding: 0 5px;
         }
 
-        /* Charge Amount Text Styling */
-        .charge-text {
+        /* Highlighted Big ₹5 Charge Box Styling */
+        .charge-highlight-box {
+            background: #e8f5e9;
+            border: 2px dashed #2e7d32;
+            border-radius: 8px;
+            padding: 12px;
             text-align: center;
-            color: #28a745;
-            font-weight: bold;
-            font-size: 13px;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .charge-highlight-box .charge-title {
+            font-size: 12px;
+            color: #1b5e20;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .charge-highlight-box .charge-amount {
+            font-size: 26px;
+            color: #d32f2f;
+            font-weight: 900;
+            letter-spacing: 0.5px;
+        }
+
+        .charge-highlight-box .charge-sub {
+            font-size: 11px;
+            color: #388e3c;
+            font-weight: 600;
+            margin-top: 2px;
         }
 
         /* Form Sections Display Control */
@@ -91,7 +114,13 @@
         </div>
 
         <p class="verification-note">PAY A MANDATORY ₹5 ONLINE VERIFICATION CHARGE TO PROCEED WITH YOUR SUPPORTING DOCUMENT UPLOAD. THIS AMOUNT WILL BE REFUNDED TO YOUR ACCOUNT IMMEDIATELY AFTER YOUR DOCUMENTS ARE VERIFIED.</p>
-        <div class="charge-text">Documents Verification Charge: Rs 5/- Only Pay Through Online</div>
+        
+        <!-- Highlighted ₹5 Charge Box -->
+        <div class="charge-highlight-box">
+            <div class="charge-title">Required Document Verification Fee</div>
+            <div class="charge-amount">₹5.00 Only</div>
+            <div class="charge-sub">Secure Online Payment (Fully Refundable)</div>
+        </div>
 
         <form id="paymentForm">
             <!-- Select Payment Method Dropdown -->

@@ -42,12 +42,12 @@
             }
         }
 
-        /* Top Blue Header Section - Edge to Edge, Bada Size & Full Width */
+        /* Top Blue Header Section - Edge to Edge */
         .top-header {
             margin-left: -20px;
             margin-right: -20px;
             margin-bottom: 25px;
-            padding: 20px 0 25px 0;
+            padding: 15px 0 20px 0;
             width: calc(100% + 40px);
             background-color: #0056b3;
             text-align: center;
@@ -62,12 +62,12 @@
             }
         }
 
-        /* Edge-to-Edge Banner Image Styling */
+        /* Logo fix: object-fit contain taaki logo kate nahi aur pura dikhe */
         .top-header img {
             width: 100%;
-            max-height: 140px;
-            object-fit: cover;
-            margin-bottom: 15px;
+            max-height: 120px;
+            object-fit: contain;
+            margin-bottom: 10px;
             display: block;
             background: transparent;
             box-shadow: none;
@@ -173,7 +173,7 @@
 <body>
     <div class="form-container">
         
-        <!-- Top Header with Edge-to-Edge Banner & Titles -->
+        <!-- Top Header with Non-cropping Logo & Titles -->
         <div class="top-header">
             <img src="logo.png" alt="Election Commission Logo">
             <div class="hindi-title">भारत निर्वाचन आयोग</div>

